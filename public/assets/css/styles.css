@@ -1,0 +1,85 @@
+/* Configuración global */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+/* Estilos de Hero */
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), 
+                url('https://images.trvl-media.com/lodging/6000000/5790000/5787600/5787565/20d5adfc.jpg?impolicy=resizecrop&rw=1200&ra=fit') center/cover;
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+}
+
+.hero-btn-primary {
+    padding: 0.8rem 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.4);
+}
+
+/* Estilos de la galería (carrusel) */
+.gallery-container {
+    max-width: 1200px;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.gallery-img {
+    height: 500px;
+    object-fit: cover;
+    filter: brightness(90%);
+}
+
+.gallery-caption-custom {
+    background: rgba(18, 18, 18, 0.75);
+    backdrop-filter: blur(4px);
+    border-radius: 12px;
+    padding: 1.5rem;
+    bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gallery-caption-custom h5 {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.gallery-caption-custom p {
+    color: #daffde;
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 8%;
+    transition: opacity 0.3s ease;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    border-radius: 50%;
+    background-size: 50%;
+}
+
+.carousel-control-prev:hover .carousel-control-prev-icon,
+.carousel-control-next:hover .carousel-control-next-icon {
+    background-color: rgba(13, 110, 253, 0.8); /* Cambia al azul primario al pasar el mouse */
+}
