@@ -136,9 +136,7 @@ typeIdSelect.addEventListener('change', () => {
 async function loadRooms() {
     try {
         const roomsContainer = document.getElementById("roomsContainer");
-
         roomsContainer.innerHTML = "";
-
         const querySnapshot = await getDocs(collection(db, "rooms"));
 
         querySnapshot.forEach((doc) => {
@@ -174,14 +172,11 @@ async function loadRooms() {
         });
 
     } catch(error) {
-
         console.error(
             "Error al cargar habitaciones:",
             error
         );
-
     }
-
 }
 
 
