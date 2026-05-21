@@ -12,6 +12,7 @@ import {
   updateDoc,
   collection, 
   addDoc,
+  getDocs,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
@@ -79,18 +80,61 @@ export async function logoutUser() {
 export async function addTypeRoom({ name, capacity, description, basePrice }) {
   try {
     const typeRoomsRef = collection(db, "typeRooms");
-    const docRef = await addDoc(typeRoomsRef, {
+    const newDocRef = doc(typeRoomsRef);
+    await setDoc(newDocRef,{
+      id: newDocRef.id,
       name: name,
       capacity: capacity,
       description: description || "",
       basePrice: basePrice,
       createdAt: serverTimestamp()
     });
+    return newDocRef.id; 
+    
+  } catch (error) {
+    console.error("Error al agregar tipo de habitación:", error);
+    throw error; 
+  }
+}
+
+export async function addRoom({ roomNumber, typeId, floor, pricePerNight, status, active }) {
+  try {
+  
+    const roomsRef = collection(db, "rooms");
+    const docRef = doc(roomsRef);
+
+    await setDoc(docRef, {
+      roomNumber: roomNumber,
+      typeId: typeId,
+      floor: floor,
+      pricePerNight: pricePerNight,
+      status: status,           
+      active: active,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+
     return docRef.id; 
     
   } catch (error) {
     console.error("Error al agregar tipo de habitación:", error);
     throw error; 
+  }
+}
+
+export async function getRoomTypes() {
+  try {
+    const querySnapshot = await getDocs(collection(db, "typeRooms"));
+    const tipos = [];
+    
+    querySnapshot.forEach((doc) => {
+      tipos.push({ id: doc.id, ...doc.data() });
+    });
+    
+    return tipos;
+  } catch (error) {
+    console.error("Error al traer los tipos de habitación:", error);
+    throw error;
   }
 }
 
