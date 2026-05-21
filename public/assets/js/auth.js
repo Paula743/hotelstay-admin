@@ -8,6 +8,10 @@ import {
 import {
   doc,
   setDoc,
+  getDoc,
+  updateDoc,
+  collection, 
+  addDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
@@ -70,6 +74,24 @@ export function observeAuth(callback) {
 
 export async function logoutUser() {
   await signOut(auth);
+}
+
+export async function addTypeRoom({ name, capacity, description, basePrice }) {
+  try {
+    const typeRoomsRef = collection(db, "typeRooms");
+    const docRef = await addDoc(typeRoomsRef, {
+      name: name,
+      capacity: capacity,
+      description: description || "",
+      basePrice: basePrice,
+      createdAt: serverTimestamp()
+    });
+    return docRef.id; 
+    
+  } catch (error) {
+    console.error("Error al agregar tipo de habitación:", error);
+    throw error; 
+  }
 }
 
 
