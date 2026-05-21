@@ -1,5 +1,5 @@
 import { observeAuth, logoutUser, setButtonLoading, addTypeRoom } from "./auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 import { db } from "./firebase.js";
 
 const logoutBtn = document.getElementById('logoutBtn');
@@ -85,3 +85,57 @@ addTypeRoomForm?.addEventListener('submit', async (event) => {
     )
   }
 });
+
+async function loadRoomTypes() {
+
+    try {
+
+        const roomTypesContainer =
+            document.getElementById("roomTypesContainer");
+
+        roomTypesContainer.innerHTML = "";
+
+        const querySnapshot =
+            await getDocs(collection(db, "typeRooms"));
+
+        querySnapshot.forEach((doc) => {
+            const roomType = doc.data();
+            roomTypesContainer.innerHTML += `
+
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+
+                        <h5 class="card-title">
+                            ${roomType.name}
+                        </h5>
+
+                        <p class="card-text">
+                            <strong>Descripción:</strong>
+                            ${roomType.description}
+                        </p>
+
+                        <p class="card-text">
+                            <strong>Capacidad:</strong>
+                            ${roomType.capacity} personas
+                        </p>
+
+                        <p class="card-text">
+                            <strong>Precio:</strong>
+                            $${roomType.basePrice}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+
+    } catch(error) {
+        console.error(
+            "Error al cargar tipos de habitación:",
+            error
+        );
+    }
+}
+
+loadRoomTypes();

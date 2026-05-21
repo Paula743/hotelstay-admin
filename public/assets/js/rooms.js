@@ -1,5 +1,5 @@
 import { hideAlert, showAlert, getFirebaseErrorMessage, observeAuth, logoutUser, setButtonLoading, addRoom, getRoomTypes } from "./auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 import { db } from "./firebase.js";
 
 const logoutBtn = document.getElementById('logoutBtn');
@@ -108,10 +108,12 @@ async function upRoomType() {
     
     listaDeTipos.forEach((tipo) => {
       const option = document.createElement('option');
-    
+      
       option.value = tipo.id; 
       option.textContent = tipo.name;
-      
+      option.dataset.price = tipo.basePrice;
+
+
       typeIdSelect.appendChild(option);
     });
     
@@ -120,6 +122,68 @@ async function upRoomType() {
   }
 }
 
+typeIdSelect.addEventListener('change', () => {
+    const selectedOption = typeIdSelect.options[typeIdSelect.selectedIndex];
+    const precio = selectedOption.dataset.price;
+    if (precio) {
+        pricePerNightInput.value = precio;
+    } else {
+        pricePerNightInput.value = "";
+    }
+
+});
+
+async function loadRooms() {
+    try {
+        const roomsContainer = document.getElementById("roomsContainer");
+
+        roomsContainer.innerHTML = "";
+
+        const querySnapshot = await getDocs(collection(db, "rooms"));
+
+        querySnapshot.forEach((doc) => {
+            const room = doc.data();
+            roomsContainer.innerHTML += `
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+
+                        <h5 class="card-title">
+                            Habitación ${room.roomNumber}
+                        </h5>
+
+                        <p class="card-text">
+                            <strong>Piso:</strong>
+                            ${room.floor}
+                        </p>
+
+                        <p class="card-text">
+                            <strong>Estado:</strong>
+                            ${room.status}
+                        </p>
+
+                        <p class="card-text">
+                            <strong>Precio:</strong>
+                            $${room.pricePerNight}
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+
+    } catch(error) {
+
+        console.error(
+            "Error al cargar habitaciones:",
+            error
+        );
+
+    }
+
+}
+
 
 document.addEventListener('DOMContentLoaded', upRoomType);
-
+loadRooms();

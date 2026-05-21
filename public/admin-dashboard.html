@@ -36,7 +36,7 @@
     <div class="d-flex flex-grow-1">
         <div class="sidebar bg-dark text-white p-3">
             <h4 class="h5 fw-bold mb-3">Administración</h4>
-
+            
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a href="admin-dashboard.html" class="nav-link text-white active">Inicio</a>
@@ -61,6 +61,76 @@
         </div>
         
         <main class="main-content p-4 flex-grow-1">
+            <div class="row g-4 mb-4">
+            <h5>Habitaciones</h5>
+            <div class="col-md-3">
+                <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h5>Total Habitaciones</h5>
+                    <h2 id="totalRooms">0</h2>
+                </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h5>Disponibles</h5>
+                    <h2 id="availableRooms">0</h2>
+                </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h5>Reservadas</h5>
+                    <h2 id="reservedRooms">0</h2>
+                </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h5>Ocupadas</h5>
+                    <h2 id="occupiedRooms">0</h2>
+                </div>
+                </div>
+            </div>
+
+            </div>
+
+            <div class="row g-4 mb-4">
+
+            <div class="col-md-3">
+                <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h5>Mantenimiento</h5>
+                    <h2 id="maintenanceRooms">0</h2>
+                </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h5>Inactivas</h5>
+                    <h2 id="inactiveRooms">0</h2>
+                </div>
+                </div>
+            </div>
+
+            </div>
+            
+            <h5>Tipos de Habitaciones</h5>
+            <div class="row g-4 mb-4" id="roomTypesStats"></div>
+
+
+            <h5>Reservas</h5>
+
+            <h5>Huespedes</h5>
+            <!--
             <div class="row g-4">
                 <div class="col-lg-3">
                     <div class="card info-card h-100">
@@ -98,7 +168,7 @@
                     </div>
                 </div>
                 
-            </div>    
+            </div> -->   
         </main>
     </div>
 
