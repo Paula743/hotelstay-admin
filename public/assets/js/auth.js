@@ -1,0 +1,97 @@
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+
+import {
+  doc,
+  setDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+
+import { auth, db } from "./firebase.js";
+
+export function showAlert(alertId, message) {
+  const alertElement = document.getElementById(alertId);
+  const textElement = alertElement?.querySelector('#errorText') || alertElement;
+  
+  if (alertElement) {
+    if (textElement) textElement.textContent = message;
+    alertElement.classList.remove('d-none');
+  }
+}
+
+export function hideAlert(alertId) {
+  const alertElement = document.getElementById(alertId);
+  if (alertElement) {
+    alertElement.classList.add('d-none');
+    alertElement.classList.remove('alert-success');
+    alertElement.classList.add('alert-danger');
+  }
+}
+
+export function setButtonLoading(button, isLoading, text, loadingText = "Procesando...") {
+  if (!button) return;
+  button.disabled = isLoading;
+  button.innerHTML = isLoading
+    ? `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>${loadingText}`
+    : text;
+}
+
+export async function registerUser({ fullName, email, phone, address, password, role = "staff", active = true }) {
+  const credential = await createUserWithEmailAndPassword(auth, email, password);
+  const user = credential.user;
+  await setDoc(doc(db, "users", user.uid), {
+    uid: user.uid,
+    fullName: fullName,
+    email: email,
+    phone: phone || "",
+    address: address || "",
+    role: role,            
+    active: active,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  });
+
+  return user;
+}
+
+export async function loginUser({ email, password }) {
+  const credential = await signInWithEmailAndPassword(auth, email, password);
+  return credential.user;
+}
+
+export function observeAuth(callback) {
+  return onAuthStateChanged(auth, callback);
+}
+
+export async function logoutUser() {
+  await signOut(auth);
+}
+
+
+export function getFirebaseErrorMessage(error) {
+  const code = error?.code || "";
+
+  switch (code) {
+    case "auth/email-already-in-use":
+      return "Este correo ya está registrado.";
+    case "auth/invalid-email":
+      return "El correo electrónico no tiene un formato válido.";
+    case "auth/weak-password":
+      return "La contraseña debe tener al menos 6 caracteres.";
+    case "auth/invalid-credential":
+      return "Correo o contraseña incorrectos.";
+    case "auth/user-not-found":
+      return "No existe una cuenta activa con este correo.";
+    case "auth/wrong-password":
+      return "La contraseña es incorrecta.";
+    case "auth/too-many-requests":
+      return "Demasiados intentos fallidos. Tu cuenta ha sido bloqueada temporalmente.";
+    default:
+      return error?.message || "Ocurrió un error inesperado.";
+  }
+}
