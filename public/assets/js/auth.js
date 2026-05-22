@@ -12,6 +12,7 @@ import {
   updateDoc,
   collection, 
   addDoc,
+
   getDocs,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
@@ -75,6 +76,23 @@ export function observeAuth(callback) {
 
 export async function logoutUser() {
   await signOut(auth);
+}
+
+export async function getCurrentUserProfile(uid) {
+  const ref = doc(db, "users", uid);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) return null;
+
+  return snap.data();
+}
+
+export async function updateCurrentProfile(uid, data) {
+  const user = doc(db, 'users', uid)
+  await updateDoc(user, {
+    ...data,
+    updatedAt: serverTimestamp()
+  });
 }
 
 export async function addTypeRoom({ name, capacity, description, basePrice }) {

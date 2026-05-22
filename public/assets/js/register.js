@@ -4,7 +4,7 @@ const form = document.getElementById('registerForm');
 const fullNameInput = document.getElementById('fullName');
 const emailInput = document.getElementById('email');
 const phoneInput = document.getElementById('phone');
-const addressInput = document.getElementById('adress');
+const addressInput = document.getElementById('address');
 const passwordInput = document.getElementById('password');
 const registerBtn = document.getElementById('registerButton');
 
