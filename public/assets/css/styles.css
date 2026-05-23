@@ -83,3 +83,9 @@ h1, h2, h3, h4, h5, h6 {
 .carousel-control-next:hover .carousel-control-next-icon {
     background-color: rgba(13, 110, 253, 0.8); /* Cambia al azul primario al pasar el mouse */
 }
+
+.openAddRoomBtn{
+    border-radius: 8px;
+    background-color: #0066ff;
+    border-color: #0066ff;
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HotelStay | Tipo de Habitación</title>
+    <title>HotelStay | Reservaciones</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
@@ -17,7 +17,7 @@
 
    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow text-center">
         <div class="container justify-content-center">
-            <a class="navbar-brand fw-bold" href="typeRoom.html">
+            <a class="navbar-brand fw-bold" href="reservation.html">
                 🏨 HotelStay
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -34,7 +34,6 @@
     </nav>
 
     <div class="d-flex flex-grow-1">
-        
         <div class="sidebar bg-dark text-white p-3">
         <h4>Administración</h4>
 
@@ -52,7 +51,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="bookings.html" class="nav-link text-white">Reservaciones</a>
+                    <a href="reservation.html" class="nav-link text-white">Reservaciones</a>
                 </li>
 
                 <li class="nav-item">
@@ -61,89 +60,100 @@
             </ul>
         </div>
 
-        <main class="main-content p-4 flex-grow-1">         
+        <main class="main-content p-4 flex-grow-1">
             <div class="text-center">
-                <h1>Nuevo tipo de habitación</h1>
+                <h1>Nuevo reservación</h1>
             </div>
             <div class="d-grid">
                 <button
                     type="button"
                     class="btn btn-primary"
                     data-bs-toggle="modal"
-                    data-bs-target="#addTypeRoomModal"
-                    id="openAddTypeRoomBtn"
+                    data-bs-target="#addReservationModal"
+                    id="openAddReservationBtn"
                 >
                     <i class="bi bi-plus-lg"></i>
-                    Agregar nuevo tipo de habitación
+                    Agregar una nueva reservación.
                 </button>
             </div>
-            <div id="roomTypesContainer" class="row g-4 mb-4"></div>
-    </main>
+            <div id="roomsContainer" class="row g-4 mb-4"></div>
+        </main>
     </div>
 
-    <!-- Modal agregar tipo de habitación -->
-  <div class="modal fade" id="addTypeRoomModal" tabindex="-1" aria-labelledby="addTypeRoomModalLabel" aria-hidden="true">
+    <!-- Modal editar perfil -->
+  <div class="modal fade" id="addReservationModal" tabindex="-1" aria-labelledby="addReservationModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow-lg modal-profile">
         <div class="modal-header border-0 pb-0">
           <div>
-            <h5 class="modal-title fw-bold" id="addTypeRoomModalLabel">
-              <i class="bi bi-door-open me-3 text-primary"></i>
-              Agregar nuevo tipo de habitación.
+            <h5 class="modal-title fw-bold" id="addReservationModalLabel">
+              <i class="bi bi-calendar-check me-3 text-primary"></i>
+              Agregar una nueva reservación.
             </h5>
             <p class="text-secondary small mb-0 mt-1">
-              Añade el nuevo tipo de habitación deseado.
+              Ingresa los datos de la nueva reservación.
             </p>
           </div>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
 
         <div class="modal-body pt-3">
-          <form id="addTypeRoomForm" novalidate>
+          <form id="addReservationForm" novalidate>
             <div class="mb-3">
-              <label for="nameCategory" class="form-label">Nombre</label>
+              <label for="fullName" class="form-label">Nombre Completo</label>
               <input
                 type="text"
                 class="form-control form-control-lg"
-                id="nameCategory"
+                id="fullNameGuest"
                 required
               >
             </div>
 
             <div class="mb-3">
-              <label for="capacity" class="form-label">Capacidad</label>
+              <label for="email" class="form-label">Correo Electrónico</label>
               <input
-                type="number"
+                type="email"
                 class="form-control form-control-lg"
-                id="capacity"
+                id="emailGuest"
                 required
               >
             </div>
 
             <div class="mb-3">
-              <label for="description" class="form-label">Descripción</label>
+              <label for="phone" class="form-label">Número de Teléfono</label>
               <input
                 type="text"
                 class="form-control form-control-lg"
-                id="description"
+                id="phoneGuest"
                 required
               >
             </div>
 
             <div class="mb-3">
-              <label for="basePrice" class="form-label">Precio base</label>
+              <label for="adress" class="form-label">Dirección</label>
               <input
-                type="number"
+                type="text"
                 class="form-control form-control-lg"
-                id="basePrice"
+                id="adressGuest"
                 required
               >
             </div>
 
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input
+                type="password"
+                class="form-control form-control-lg"
+                id="passwordGuest"
+                required
+              >
+            </div>
+
+            
             <div class="d-grid">
-              <button type="submit" id="saveTypeRoomBtn" class="btn btn-primary btn-lg">
+              <button type="submit" id="saveReservationBtn" class="btn btn-primary btn-lg">
                 <i class="bi bi-check-circle me-2"></i>
-                Registrar tipo de habitación
+                Registrar reservación
               </button>
             </div>
           </form>
@@ -162,6 +172,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <script type="module" src="assets/js/typeRoom.js"></script>
+    <script type="module" src="assets/js/reservation.js"></script>
 </body>
 </html>

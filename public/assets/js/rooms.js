@@ -135,14 +135,16 @@ typeIdSelect.addEventListener('change', () => {
 
 async function loadRooms() {
     try {
+        const plantilla = document.getElementById("molde-container")
         const roomsContainer = document.getElementById("roomsContainer");
         roomsContainer.innerHTML = "";
         const querySnapshot = await getDocs(collection(db, "rooms"));
 
         querySnapshot.forEach((doc) => {
             const room = doc.data();
+            
             roomsContainer.innerHTML += `
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-body">
 
@@ -166,6 +168,15 @@ async function loadRooms() {
                         </p>
 
                     </div>
+                    <div class="d-flex gap-2 w-100 align-items-center">
+                        <button type="button" class="btn btn-outline-secondary flex-grow-1 d-flex align-items-center justify-content-center gap-2 py-2 text-dark m-2" style="border-color: #cbd5e1; border-radius: 8px;">
+                            <i class="bi bi-pencil fs-6"></i>
+                            <span>Edit</span>
+                        </button>
+
+                        <button type="button" class="btn btn-outline-secondary d-flex align-items-center justify-content-center p-3 text-danger m-2" style="border-color: #cbd5e1; border-radius: 8px; width: 42px; height: 42px;">
+                            <i class="bi bi-trash3 fs-5"></i>
+                        </button>
                 </div>
             </div>
             `;
