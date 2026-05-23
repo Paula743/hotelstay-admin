@@ -56,7 +56,7 @@ addRoomForm?.addEventListener('submit', async (event) => {
 
 
     if (!roomNumber || !typeId) {
-            showAlert('errorMessage', 'Todos los campos son obligatorios para el registro.');
+            alert('Todos los campos son obligatorios para el registro.');
             return;
     }
 
@@ -69,8 +69,8 @@ addRoomForm?.addEventListener('submit', async (event) => {
         setButtonLoading(
         saveRoomBtn,
         true,
-        '<i class="bi bi-check-circle me-2"></i> Guardar Cambios',
-        'Guardando...'
+        '<i class="bi bi-check-circle me-2"></i> Registrar habitación',
+        'Registrando...'
         )
 
         await addRoom({ 
@@ -88,7 +88,7 @@ addRoomForm?.addEventListener('submit', async (event) => {
         setTimeout(() => {
         addRoomModal?.hide()
         addRoomForm.reset() 
-        }, 1500)
+        }, 100)
 
     } catch (error) {
         alert( 'No se pudo registrar la habitación')
@@ -96,7 +96,7 @@ addRoomForm?.addEventListener('submit', async (event) => {
         setButtonLoading(
         saveRoomBtn,
         false,
-        '<i class="bi bi-check-circle me-2"></i> Guardar Cambios' 
+        '<i class="bi bi-check-circle me-2"></i> Registrar habitación' 
         )
     }
 })

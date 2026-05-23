@@ -51,32 +51,36 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="reservas.html" class="nav-link text-white">Reservas</a>
+                    <a href="bookings.html" class="nav-link text-white">Reservaciones</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="huespedes.html" class="nav-link text-white">Huespedes</a>
+                    <a href="guests.html" class="nav-link text-white">Huespedes</a>
                 </li>
             </ul>
         </div>
 
         <main class="main-content p-4 flex-grow-1">
-            <div class="text-center">
-                <h1>Nueva habitación</h1>
+          <div class="d-flex justify-content-between align-items-center py-4 px-3 bg-light">
+            <div>
+              <h1 class="fw-bold fs-2 mb-1">Gestión de Habitaciones</h1>
+              <p class="text-muted mb-0">Visualice y gestione las unidades de inventario del hotel.</p>
             </div>
-            <div class="d-grid">
+            <div>
                 <button
                     type="button"
-                    class="btn btn-primary"
+                    class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 fw-semibold"
                     data-bs-toggle="modal"
                     data-bs-target="#addRoomModal"
                     id="openAddRoomBtn"
                 >
-                    <i class="bi bi-plus-lg"></i>
-                    Agregar una nueva habitación.
+                    <i class="bi bi-plus-circle fs-5"></i>
+                    Añadir nueva habitación
                 </button>
             </div>
-            <div id="roomsContainer" class="row g-4 mb-4"></div>
+          </div>
+    
+            <div id="roomsContainer" class="row g-4 mb-4 p-3"></div>
         </main>
     </div>
 
@@ -88,7 +92,7 @@
           <div>
             <h5 class="modal-title fw-bold" id="addRoomModalLabel">
               <i class="bi bi-grid me-3 text-primary"></i>
-              Agregar nuevo tipo de habitación.
+              Agregar una nueva habitación.
             </h5>
             <p class="text-secondary small mb-0 mt-1">
               Añade la habitación deseado.
@@ -151,7 +155,7 @@
             <div class="d-grid">
               <button type="submit" id="saveRoomBtn" class="btn btn-primary btn-lg">
                 <i class="bi bi-check-circle me-2"></i>
-                Registrar Habitación
+                Registrar habitación
               </button>
             </div>
           </form>

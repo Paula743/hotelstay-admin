@@ -122,12 +122,13 @@ export async function addRoom({ roomNumber, typeId, floor, pricePerNight, status
   }
 }
 
+// función que obtiene los tipos de habitación
 export async function getRoomTypes() {
   try {
     const querySnapshot = await getDocs(collection(db, "typeRooms"));
     const tipos = [];
     
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((doc) => { 
       tipos.push({ id: doc.id, ...doc.data() });
     });
     

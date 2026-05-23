@@ -1,5 +1,5 @@
 import { observeAuth, logoutUser, setButtonLoading, addTypeRoom } from "./auth.js";
-import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 import { db } from "./firebase.js";
 
 const logoutBtn = document.getElementById('logoutBtn');
@@ -51,16 +51,24 @@ addTypeRoomForm?.addEventListener('submit', async (event) => {
   const basePrice = basePriceInput.value.trim()
 
   if (!name || !capacityValue || !description || !basePrice) {
-          showAlert('errorMessage', 'Todos los campos son obligatorios para el registro.');
+          alert('Todos los campos son obligatorios para el registro.');
           return;
+  }
+
+  const q = query(collection(db, 'typeRooms'), where('name', '==',name))
+  const nameExistente = await getDocs(q)
+
+  if(!nameExistente.empty){
+        alert('Esta categoría ya está registrada en el sistema')
+        return
   }
  
   try {
     setButtonLoading(
       saveTypeRoomBtn,
       true,
-      '<i class="bi bi-check-circle me-2"></i> Guardar Cambios',
-      'Guardando...'
+      '<i class="bi bi-check-circle me-2"></i> Registrar',
+      'Registrando...'
     )
 
     await addTypeRoom({ 
@@ -73,7 +81,7 @@ addTypeRoomForm?.addEventListener('submit', async (event) => {
     setTimeout(() => {
       addTypeRoomModal?.hide()
       addTypeRoomForm.reset() 
-    }, 1500)
+    }, 100)
 
   } catch (error) {
     alert( 'No se pudo registrar el tipo de habitación')
@@ -81,7 +89,7 @@ addTypeRoomForm?.addEventListener('submit', async (event) => {
     setButtonLoading(
       saveTypeRoomBtn,
       false,
-      '<i class="bi bi-check-circle me-2"></i> Guardar Cambios' 
+      '<i class="bi bi-check-circle me-2"></i> Registrar' 
     )
   }
 });
