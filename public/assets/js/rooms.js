@@ -31,6 +31,11 @@ const saveRoomEditBtn = document.getElementById('saveRoomEditBtn')
 const editRoomModalElement = document.getElementById('editRoomModal')
 const editRoomModal = editRoomModalElement ? bootstrap.Modal.getOrCreateInstance(editRoomModalElement) : null
 
+// Variable y constante para eliminar habitación
+let roomToDelete = null
+const deleteRoomBtn = document.getElementById('confirmDeleteBtn')
+const deleteRoomModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteRoomModal'))
+
 //Verificar rol
 observeAuth(async (user) => {
     if (!user) {
@@ -257,6 +262,29 @@ editRoomForm?.addEventListener('submit', async (event) => {
   }
 })
 
+// Abre el modal y guarda el id
+window.deleteRoom = async function(button) {
+    roomToDelete = button.getAttribute('data_id')
+    deleteRoomModal.show()
+    console.log(roomToDelete)
+}
+
+// Elimina la habitación
+deleteRoomBtn?.addEventListener('click', async () => {
+    if (!roomToDelete) return
+
+    try {
+        await deleteDoc(doc(db, 'rooms', roomToDelete))
+        deleteRoomModal.hide()
+        await loadRooms()
+
+    } catch (error) {
+        console.error('Error al eliminar habitación:', error)
+    } finally {
+        roomToDelete = null
+    }
+})
+
 // Tarjetas con información de las habitaciones
 async function loadRooms() {
     try {
@@ -320,8 +348,8 @@ async function loadRooms() {
 
                         <button type="button" 
                                 class="btn btn-outline-secondary d-flex align-items-center justify-content-center p-3 text-danger m-2" 
-                                style="border-color: #cbd5e1; border-radius: 8px; width: 42px; height: 42px;
-                                data-id="${roomId}"
+                                style="border-color: #cbd5e1; border-radius: 8px; width: 42px; height: 42px;"
+                                data_id="${roomId}"
                                 onclick="deleteRoom(this)">
                             <i class="bi bi-trash3 fs-5"></i>
                         </button>
@@ -339,8 +367,6 @@ async function loadRooms() {
         );
     }
 }
-
-
 
 document.addEventListener('DOMContentLoaded', upRoomType);
 loadRooms();
