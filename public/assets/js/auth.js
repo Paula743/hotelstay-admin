@@ -139,6 +139,35 @@ export async function getRoomTypes() {
   }
 }
 
+export async function addGuest({ name, apellido, email, phone, identification, address, active = true }) {
+  try {
+  
+    const guestRef = collection(db, "guests");
+    const docGuestRef = doc(guestRef);
+
+    await setDoc(docGuestRef, {
+      guestId: docGuestRef.id,
+      name: name,
+      apellido: apellido,
+      email: email,
+      phone: phone,
+      identification: identification,
+      address: address,          
+      active: active,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+
+    return docGuestRef.id; 
+    
+  } catch (error) {
+    console.error("Error al agregar el huésped:", error);
+    throw error; 
+  }
+}
+
+
+
 
 export function getFirebaseErrorMessage(error) {
   const code = error?.code || "";
