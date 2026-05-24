@@ -87,7 +87,8 @@ addRoomForm?.addEventListener('submit', async (event) => {
 
         setTimeout(() => {
         addRoomModal?.hide()
-        addRoomForm.reset() 
+        addRoomForm.reset()
+        loadRooms();
         }, 1500)
 
     } catch (error) {

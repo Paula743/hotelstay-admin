@@ -27,6 +27,7 @@ const editAddress = document.getElementById('editAddress');
 // Constantes para Calendario de Estadía
 const checkInInput = document.getElementById('checkInDate');
 const checkOutInput = document.getElementById('checkOutDate');
+const guestsInput = document.getElementById('guestsCount');
 const searchRoomsForm = document.getElementById('searchRoomsForm');
 const roomsResultsContainer = document.getElementById('roomsResultsContainer');
 const placeholderMessage = document.getElementById('placeholderMessage');
@@ -152,10 +153,144 @@ if (checkInInput) {
     checkInInput.addEventListener('change', (e) => {
         const fechaSeleccionada = e.target.value;
         if (checkOutInput) {
-            checkOutInput.min = fechaSeleccionada; 
+            if (fechaSeleccionada) {
+                const fechaEntrada = new Date(fechaSeleccionada + 'T00:00:00');
+                fechaEntrada.setDate(fechaEntrada.getDate() + 1);
+                const mañanaDeFechaSeleccionada = fechaEntrada.toISOString().split('T')[0];
+                
+                checkOutInput.min = mañanaDeFechaSeleccionada;
+            } else {
+                checkOutInput.min = hoy;
+            }
             if (checkOutInput.value <= fechaSeleccionada) {
                 checkOutInput.value = "";
             }
         }
     });
 }
+
+async function loadAvailableRooms(requiredGuests) {
+    try {
+        const typeRoomsSnapshot = await getDocs(collection(db, "typeRooms"));
+        const typeRoomsList = {};
+        
+        typeRoomsSnapshot.forEach(doc => {
+            typeRoomsList[doc.id] = { id: doc.id, ...doc.data() };
+        });
+
+        const roomsSnapshot = await getDocs(collection(db, "rooms"));
+        const roomsList = [];
+        
+        roomsSnapshot.forEach(doc => {
+            roomsList.push({ id: doc.id, ...doc.data() });
+        });
+
+        const filteredResults = [];
+
+        for (const idDelTipo in typeRoomsList) {
+            const tipoData = typeRoomsList[idDelTipo];
+            
+            if (tipoData.capacity >= requiredGuests) {
+                
+                const habitacionesFisicasDisponibles = roomsList.filter(room => 
+                    room.typeId === idDelTipo && 
+                    room.status === 'available' && 
+                    room.active !== false
+                );
+
+                if (habitacionesFisicasDisponibles.length > 0) {
+                    filteredResults.push({
+                        ...tipoData,
+                        finalPrice: habitacionesFisicasDisponibles[0].pricePerNight || tipoData.basePrice || 0,
+                        availableStock: habitacionesFisicasDisponibles.length
+                    });
+                }
+            }
+        }
+        renderRoomCards(filteredResults);
+
+    } catch (error) {
+        console.error("Error crítico al procesar la búsqueda en Firestore:", error);
+        if (roomsResultsContainer) {
+            roomsResultsContainer.innerHTML = `
+                <div class="col-12 text-center text-danger py-5">
+                    Hubo un error al intentar consultar la disponibilidad de las habitaciones.
+                </div>
+            `;
+        }
+    }
+}
+
+function renderRoomCards(roomTypes) {
+    if (!roomsResultsContainer) return;
+    
+    if (placeholderMessage) placeholderMessage.classList.add('d-none');
+    resultsTitle?.classList.remove('d-none');
+    resultsSubtitle?.classList.remove('d-none');
+    roomsResultsContainer.innerHTML = "";
+
+    if (roomTypes.length === 0) {
+        roomsResultsContainer.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <p class="text-muted fs-5">No hay habitaciones disponibles que cumplan con la capacidad o fechas solicitadas.</p>
+            </div>
+        `;
+        return;
+    }
+
+    roomTypes.forEach(room => {
+    const badges = `<span class="badge bg-light text-dark border me-1 mb-1"> Máximo: ${room.capacity} personas</span>`;
+
+        const cardHTML = `
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden position-relative">
+                    <img src="${room.image}" 
+                         class="card-img-top" alt="${room.name}" style="height: 220px; object-fit: cover;">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title fw-bold text-dark mb-0">${room.name}</h5>
+                        </div>
+                        <p class="card-text text-muted small text-truncate-3 mb-3">${room.description}</p>
+                        <div class="mb-3">
+                            ${badges}
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
+                            <div>
+                                <span class="fs-4 fw-bold text-primary">$${room.finalPrice}</span>
+                                <small class="text-muted text-uppercase d-block" style="font-size: 10px;">Por noche</small>
+                            </div>
+                            <button class="btn btn-dark btn-sm rounded-pill px-4 fw-medium" data-id="${room.id}">
+                                Reservar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        roomsResultsContainer.insertAdjacentHTML('beforeend', cardHTML);
+    });
+}
+
+searchRoomsForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const checkIn = checkInInput?.value;
+    const checkOut = checkOutInput?.value;
+    // Leemos el valor del input numérico y lo transformamos a un entero base 10
+    const guestsNeeded = parseInt(guestsInput?.value || "1", 10);
+
+    if (!checkIn || !checkOut) {
+        alert("Por favor, selecciona las fechas completas para tu estancia.");
+        return;
+    }
+
+    if (roomsResultsContainer) {
+        roomsResultsContainer.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-2 text-muted">Buscando opciones óptimas para ${guestsNeeded} huéspedes...</p>
+            </div>
+        `;
+    }
+    await loadAvailableRooms(guestsNeeded);
+});
