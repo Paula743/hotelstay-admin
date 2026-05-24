@@ -57,6 +57,19 @@
                         <label for="checkOutDate" class="form-label small fw-semibold text-muted">Fecha de Salida (Check-out)</label>
                         <input type="date" id="checkOutDate" class="form-control form-control-lg rounded-3" required>
                     </div>
+
+                    <div class="col-12 col-md-3">
+                        <label for="guestsCount" class="form-label small fw-semibold text-muted">Huéspedes</label>
+                        <input 
+                            type="number" 
+                            id="guestsCount" 
+                            class="form-control form-control-lg rounded-3 text-center fw-medium" 
+                            value="1" 
+                            min="1" 
+                            max="10" 
+                            required
+                        >
+                    </div>
                     
                     <div class="col-12 col-md-4">
                         <button type="submit" id="searchRoomsBtn" class="btn btn-primary btn-lg w-100 rounded-3 fw-medium shadow-sm">

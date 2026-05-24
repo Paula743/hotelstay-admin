@@ -43,9 +43,8 @@ observeAuth(async (user) => {
     if (!user) {
         window.location.href = 'index.html';
     } else {
-        currentUserSession = user; // Guardamos la sesión activa
+        currentUserSession = user;
         try {
-            // Usamos tu nueva función optimizada
             const userData = await getCurrentUserProfile(user.uid);
 
             if (userData) {
@@ -75,22 +74,18 @@ logoutBtn?.addEventListener('click', async () => {
 editProfileBtn?.addEventListener('click', async () => {
     if (!currentUserSession) return;
 
-    // Reseteamos las alertas antes de abrir el modal
     hideAlert('profileAlert');
     hideAlert('profileSuccess');
 
     try {
-        // Traemos la info directo de Firestore usando tu función estructurada
         const data = await getCurrentUserProfile(currentUserSession.uid);
 
         if (data) {
-            // Rellenamos los campos del HTML con lo que hay en la Base de Datos
             if (editName) editName.value = data.fullName || '';
             if (editEmail) editEmail.value = data.email || '';
             if (editPhone) editPhone.value = data.phone || '';
             if (editAddress) editAddress.value = data.address || '';
             
-            // Abrimos el modal visualmente
             editProfileModal?.show();
         }
     } catch (error) {
@@ -131,8 +126,8 @@ editProfileForm?.addEventListener('submit', async (event) => {
         showAlert('profileMessage', '¡Perfil actualizado con éxito!');
         
         const alertBox = document.getElementById('profileMessage');
-        alertBox?.classList.remove('alert-danger'); // Le quitamos lo rojo
-        alertBox?.classList.add('alert-success');    // Le ponemos lo verde
+        alertBox?.classList.remove('alert-danger');
+        alertBox?.classList.add('alert-success');
 
         if (welcomeSpan) {
             welcomeSpan.textContent = `👋 ¡Bienvenid@, ${name}!`;
