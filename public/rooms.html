@@ -84,7 +84,7 @@
         </main>
     </div>
 
-    <!-- Modal editar perfil -->
+    <!-- Modal registrar habitación -->
   <div class="modal fade" id="addRoomModal" tabindex="-1" aria-labelledby="addRoomModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow-lg modal-profile">
@@ -156,6 +156,91 @@
               <button type="submit" id="saveRoomBtn" class="btn btn-primary btn-lg">
                 <i class="bi bi-check-circle me-2"></i>
                 Registrar habitación
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal editar habitación -->
+  <div class="modal fade" id="editRoomModal" tabindex="-1" aria-labelledby="editRoomModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg modal-profile">
+        <div class="modal-header border-0 pb-0">
+          <div>
+            <h5 class="modal-title fw-bold" id="editRoomModalLabel">
+              <i class="bi bi-door-open me-2 text-primary"></i>
+              Editar habitación
+            </h5>
+            <p class="text-secondary small mb-0 mt-1">
+              Edita los cambios necesarios para la habitación.
+            </p>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body pt-3">
+          <div id="roomAlert" class="alert alert-danger d-none" role="alert"></div>
+          <div id="roomSuccess" class="alert alert-success d-none" role="alert"></div>
+
+          <input type="hidden" id="editRoomId">
+
+          <form id="editRoomForm" novalidate>
+            <div class="mb-3">
+              <label for="editRoomNumber" class="form-label">Número de Habitación</label>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="editRoomNumber"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="editTypeId" class="form-label">Tipo de Habitación</label>
+              <select id="editTypeId" class="form-select" required>
+                <option value="">-- Selecciona un tipo --</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="editFloor" class="form-label">Piso</label>
+              <input
+                type="number"
+                class="form-control form-control-lg"
+                id="editFloor"
+                required
+                min="1"
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="editPricePerNight" class="form-label">Precio por noche</label>
+              <input
+                type="number"
+                class="form-control form-control-lg"
+                id="editPricePerNight"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="editStatus" class="form-label">Estado</label>
+              <select id="editStatus" class="form-select" required>
+                <option value="available">Disponible</option>
+                <option value="reserved">Reservada</option>
+                <option value="occupied">Ocupada</option>
+                <option value="maintenance">Mantenimiento</option>
+                <option value="inactive">Inactiva</option>
+            </select>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" id="saveRoomEditBtn" class="btn btn-primary btn-lg">
+                <i class="bi bi-check-circle me-2"></i>
+                Guardar cambios
               </button>
             </div>
           </form>

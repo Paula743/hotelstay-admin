@@ -104,6 +104,7 @@ export async function addRoom({ roomNumber, typeId, floor, pricePerNight, status
     const docRef = doc(roomsRef);
 
     await setDoc(docRef, {
+      roomId: docRef.id,
       roomNumber: roomNumber,
       typeId: typeId,
       floor: floor,
