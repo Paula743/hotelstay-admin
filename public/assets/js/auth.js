@@ -123,6 +123,7 @@ export async function addRoom({ roomNumber, typeId, floor, pricePerNight, status
     const docRef = doc(roomsRef);
 
     await setDoc(docRef, {
+      roomId: docRef.id,
       roomNumber: roomNumber,
       typeId: typeId,
       floor: floor,
@@ -141,12 +142,13 @@ export async function addRoom({ roomNumber, typeId, floor, pricePerNight, status
   }
 }
 
+// función que obtiene los tipos de habitación
 export async function getRoomTypes() {
   try {
     const querySnapshot = await getDocs(collection(db, "typeRooms"));
     const tipos = [];
     
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((doc) => { 
       tipos.push({ id: doc.id, ...doc.data() });
     });
     
@@ -156,6 +158,35 @@ export async function getRoomTypes() {
     throw error;
   }
 }
+
+export async function addGuest({ name, apellido, email, phone, identification, address, active = true }) {
+  try {
+  
+    const guestRef = collection(db, "guests");
+    const docGuestRef = doc(guestRef);
+
+    await setDoc(docGuestRef, {
+      guestId: docGuestRef.id,
+      name: name,
+      apellido: apellido,
+      email: email,
+      phone: phone,
+      identification: identification,
+      address: address,          
+      active: active,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+
+    return docGuestRef.id; 
+    
+  } catch (error) {
+    console.error("Error al agregar el huésped:", error);
+    throw error; 
+  }
+}
+
+
 
 
 export function getFirebaseErrorMessage(error) {
