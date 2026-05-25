@@ -7,7 +7,14 @@ import {
     setButtonLoading,
     getCurrentUserProfile 
 } from "./auth.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { 
+    collection, 
+    getDocs, 
+    doc, 
+    query, 
+    where, 
+    runTransaction 
+} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 import { db } from "./firebase.js"; 
 
 const welcomeSpan = document.getElementById('userWelcome');
@@ -24,7 +31,7 @@ const editEmail = document.getElementById('editEmail');
 const editPhone = document.getElementById('editPhone');
 const editAddress = document.getElementById('editAddress');
 
-// Constantes para Calendario de Estadía
+// Constantes para Calendario de Estancia
 const checkInInput = document.getElementById('checkInDate');
 const checkOutInput = document.getElementById('checkOutDate');
 const guestsInput = document.getElementById('guestsCount');
@@ -32,7 +39,7 @@ const searchRoomsForm = document.getElementById('searchRoomsForm');
 const roomsResultsContainer = document.getElementById('roomsResultsContainer');
 const placeholderMessage = document.getElementById('placeholderMessage');
 const resultsTitle = document.getElementById('resultsTitle');
-const resultsSubtitle = document.getElementById('resultsSubtitle')
+const resultsSubtitle = document.getElementById('resultsSubtitle');
 
 const editProfileModal = editProfileModalElement 
     ? bootstrap.Modal.getOrCreateInstance(editProfileModalElement) 
@@ -93,7 +100,6 @@ editProfileBtn?.addEventListener('click', async () => {
         console.error("Error al precargar el perfil:", error);
     }
 });
-
 
 editProfileForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -169,6 +175,26 @@ if (checkInInput) {
         }
     });
 }
+async function isRoomOccupied(roomId, checkInBuscado, checkOutBuscado) {
+    const reservationsRef = collection(db, "reservations");
+    const q = query(
+        reservationsRef, 
+        where("roomId", "==", roomId),
+        where("status", "==", "reserved") 
+    );
+    
+    const querySnapshot = await getDocs(q);
+    let ocupada = false;
+
+    querySnapshot.forEach((doc) => {
+        const reserva = doc.data();
+        if (checkInBuscado < reserva.checkOutDate && checkOutBuscado > reserva.checkInDate) {
+            ocupada = true; 
+        }
+    });
+
+    return ocupada;
+}
 
 async function loadAvailableRooms(requiredGuests) {
     try {
@@ -192,12 +218,23 @@ async function loadAvailableRooms(requiredGuests) {
             const tipoData = typeRoomsList[idDelTipo];
             
             if (tipoData.capacity >= requiredGuests) {
-                
-                const habitacionesFisicasDisponibles = roomsList.filter(room => 
+
+                const checkInBuscado = checkInInput?.value;
+                const checkOutBuscado = checkOutInput?.value;
+
+                const habitacionesFisicasDeEsteTipo = roomsList.filter(room => 
                     room.typeId === idDelTipo && 
-                    room.status === 'available' && 
                     room.active !== false
                 );
+
+                const habitacionesFisicasDisponibles = [];
+
+                for (const room of habitacionesFisicasDeEsteTipo) {
+                    const ocupada = await isRoomOccupied(room.id, checkInBuscado, checkOutBuscado);
+                    if (!ocupada) {
+                        habitacionesFisicasDisponibles.push(room);
+                    }
+                }
 
                 if (habitacionesFisicasDisponibles.length > 0) {
                     filteredResults.push({
@@ -307,7 +344,6 @@ function addToCart(room) {
     const fechaCheckIn = checkInInput.value;
     const fechaCheckOut = checkOutInput.value;
     const nochesCalculadas = calculateSelectedNights();
-
     const huespedes = parseInt(guestsInput?.value || "1", 10);
 
     cartReservations = []; 
@@ -357,26 +393,26 @@ function updateCartUI() {
         const itemTotal = item.basePrice * item.nights;
         total += itemTotal;
 
-    reservationItems.innerHTML += `
-        <div class="card mb-3 border-0 bg-light rounded-3 p-3 position-relative">
-            <button onclick="removeFromCart(${index})" class="btn-close position-absolute top-0 end-0 m-2" style="font-size: 0.8rem;"></button>
-            <h6 class="fw-bold mb-1">${item.name}</h6>
-            <small class="text-muted d-block mb-2">Máximo: ${item.capacity} personas</small>
-            <div class="d-flex justify-content-between align-items-center">
-                <span class="fw-bold text-primary">$${item.basePrice} / noche</span>
-            
-                <div class="input-group input-group-sm" style="width: 120px;">
-                    <span class="input-group-text bg-white small">Noches</span>
-                    <input 
-                        type="number" 
-                        class="form-control text-center bg-white" 
-                        value="${item.nights}" 
-                        disabled
-                    >
+        reservationItems.innerHTML += `
+            <div class="card mb-3 border-0 bg-light rounded-3 p-3 position-relative">
+                <button onclick="removeFromCart(${index})" class="btn-close position-absolute top-0 end-0 m-2" style="font-size: 0.8rem;"></button>
+                <h6 class="fw-bold mb-1">${item.name}</h6>
+                <small class="text-muted d-block mb-2">Máximo: ${item.capacity} personas</small>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-bold text-primary">$${item.basePrice} / noche</span>
+                
+                    <div class="input-group input-group-sm" style="width: 120px;">
+                        <span class="input-group-text bg-white small">Noches</span>
+                        <input 
+                            type="number" 
+                            class="form-control text-center bg-white" 
+                            value="${item.nights}" 
+                            disabled
+                        >
+                    </div>
                 </div>
-                </div>
-        </div>
-    `;
+            </div>
+        `;
     });
 
     reservationTotal.textContent = `$${total}`;
@@ -389,7 +425,8 @@ window.removeFromCart = (index) => {
 };
 
 window.updateNights = (index, value) => {
-    cartReservations[index].nights = parseInt(value, 10) || 1;
+    const nightsParsed = parseInt(value, 10);
+    cartReservations[index].nights = nightsParsed > 0 ? nightsParsed : 1;
     localStorage.setItem('cartReservations', JSON.stringify(cartReservations));
     updateCartUI();
 };
@@ -436,15 +473,90 @@ document.getElementById('clearReservationsBtn')?.addEventListener('click', () =>
     updateCartUI();
 });
 
-window.removeFromCart = (index) => {
-    cartReservations.splice(index, 1);
-    localStorage.setItem('cartReservations', JSON.stringify(cartReservations));
-    updateCartUI();
-};
+const checkoutReservationsBtn = document.getElementById('checkoutReservationsBtn');
 
-window.updateNights = (index, value) => {
-    const nightsParsed = parseInt(value, 10);
-    cartReservations[index].nights = nightsParsed > 0 ? nightsParsed : 1;
-    localStorage.setItem('cartReservations', JSON.stringify(cartReservations));
-    updateCartUI();
-};
+checkoutReservationsBtn?.addEventListener('click', async () => {
+    if (cartReservations.length === 0) return;
+    const reservationToProcess = cartReservations[0]; 
+
+    try {
+        setButtonLoading(checkoutReservationsBtn, true, 'Confirmar Reservación 🛎️', 'Creando Reservación...');
+
+        let numeroHabitacionAsignada = "";
+        const ahora = new Date();
+
+        const roomsRef = collection(db, "rooms");
+        const qRooms = query(
+            roomsRef, 
+            where("typeId", "==", reservationToProcess.id), 
+            where("active", "!=", false)
+        );
+
+        const roomsSnapshot = await getDocs(qRooms);
+        let roomPhysicalId = null;
+
+        for (const roomDoc of roomsSnapshot.docs) {
+            const isOccupied = await isRoomOccupied(roomDoc.id, reservationToProcess.checkIn, reservationToProcess.checkOut);
+            if (!isOccupied) {
+                roomPhysicalId = roomDoc.id;
+                numeroHabitacionAsignada = roomDoc.data().roomNumber || "S/N";
+                break; 
+            }
+        }
+
+        if (!roomPhysicalId) {
+            throw new Error("Lo sentimos, no quedan habitaciones físicas disponibles de esta categoría para las fechas solicitadas.");
+        }
+
+        await runTransaction(db, async (transaction) => {
+            const docReservaRef = doc(collection(db, "reservations"));
+            const nuevaReservaData = {
+                guestId: currentUserSession?.uid || "invitado",          
+                roomId: roomPhysicalId,                                  
+                checkInDate: reservationToProcess.checkIn,               
+                checkOutDate: reservationToProcess.checkOut,             
+                nights: reservationToProcess.nights,                     
+                pricePerNight: reservationToProcess.basePrice,           
+                total: reservationToProcess.basePrice * reservationToProcess.nights, 
+                status: "reserved",                                      
+                createdAt: ahora,                                        
+                updatedAt: ahora                                         
+            };
+
+            transaction.set(docReservaRef, nuevaReservaData);
+        });
+
+        document.getElementById('modalRoomNumber').innerText = `Habitación ${numeroHabitacionAsignada}`;
+        document.getElementById('modalDates').innerText = `${reservationToProcess.checkIn} al ${reservationToProcess.checkOut} (${reservationToProcess.nights} noches)`;
+        document.getElementById('modalGuests').innerText = `${reservationToProcess.guests} ${reservationToProcess.guests === 1 ? 'persona' : 'personas'}`;
+        document.getElementById('modalTotalPrice').innerText = `$${reservationToProcess.basePrice * reservationToProcess.nights} MXN`;
+
+        const offcanvasElement = document.getElementById('reservationsOffcanvas');
+        if (offcanvasElement) {
+            const instanceOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+            instanceOffcanvas?.hide();
+        }
+
+        cartReservations = [];
+        localStorage.removeItem('cartReservations');
+        updateCartUI();
+
+        const modalElement = document.getElementById('successReservationModal');
+        const bootstrapModal = new bootstrap.Modal(modalElement, {
+            backdrop: 'static',
+            keyboard: false
+        });
+        bootstrapModal.show();
+
+        document.getElementById('btnAcceptModal')?.addEventListener('click', () => {
+            bootstrapModal.hide();
+            window.location.reload();
+        });
+
+    } catch (error) {
+        console.error("Error al procesar la reserva directa:", error);
+        alert(error.message || "No se pudo crear la reserva. Inténtalo de nuevo.");
+    } finally {
+        setButtonLoading(checkoutReservationsBtn, false, 'Confirmar Reservación 🛎️');
+    }
+});
