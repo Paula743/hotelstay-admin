@@ -56,7 +56,7 @@
         <div class="row mb-5">
             <div class="col-12">
                 <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
-                    <h4 class="fw-bold text-dark mb-4">Introduce las fechas de tu estadía</h4>
+                    <h4 class="fw-bold text-dark mb-4">Introduce las fechas de tu estancia</h4>
                     
                     <form id="searchRoomsForm" class="row g-3 align-items-end">
                         <div class="col-12 col-md-3">
@@ -149,7 +149,7 @@
 
     <div class="offcanvas offcanvas-end border-0 shadow-lg" tabindex="-1" id="reservationsOffcanvas" aria-labelledby="reservationsOffcanvasLabel">
         <div class="offcanvas-header border-bottom bg-dark text-white">
-            <h5 class="offcanvas-title fw-bold" id="reservationsOffcanvasLabel">🛎️ Tu Estadía</h5>
+            <h5 class="offcanvas-title fw-bold" id="reservationsOffcanvasLabel">🛎️ Tu Estancia</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
     
@@ -165,7 +165,7 @@
                 </div>
             
                 <button id="checkoutReservationsBtn" class="btn btn-primary w-100 py-2 rounded-3 fw-medium shadow-sm mb-2">
-                    Proceder al Pago 💳
+                    Confirmar Reservación 🛎️
                 </button>
                 <button id="clearReservationsBtn" class="btn btn-outline-secondary w-100 py-2 rounded-3 fw-medium border-0">
                     Vaciar Selección 🚮
@@ -174,7 +174,55 @@
         </div>
     </div>
 
+    <!-- Modal para mensaje de reservación exitosa-->
+    <div class="modal fade" id="successReservationModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header border-0 bg-white text-dark pt-4 pb-2 rounded-top-4 d-flex flex-column align-items-center position-relative">
+                    <h3 class="modal-title fs-4 fw-bold mb-0 text-success" id="successModalLabel">¡Reservación Confirmada! 🎉</h3>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="text-secondary text-center mb-4">Tu reservación ha sido registrada con éxito en el sistema. A continuación los detalles de tu estancia:</p>
+                    
+                    <div class="bg-light p-3 rounded-3 mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">🏨 Habitación Asignada:</span>
+                            <span class="fw-bold text-dark" id="modalRoomNumber">--</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">📅 Periodo de Estancia:</span>
+                            <span class="fw-medium text-dark" id="modalDates">--</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">👤 Total de Huéspedes:</span>
+                            <span class="fw-medium text-dark" id="modalGuests">--</span>
+                        </div>
+                        <hr class="text-muted my-2">
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="text-dark fw-bold">💰 Total a Pagar:</span>
+                            <span class="fs-5 fw-bold text-success" id="modalTotalPrice">--</span>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning border-0 shadow-none rounded-3 mb-0" role="alert">
+                        <small class="d-flex align-items-start gap-2">
+                            <span>🛎️</span>
+                            <span>Recuerda que tu estado de reservación actual es <strong>"reserved"</strong>. Realizarás el pago completo al hacer Check-in en la recepción del hotel.</span>
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-success w-100 py-2 rounded-3 fw-medium" id="btnAcceptModal">
+                        Entendido, ¡gracias!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="module" src="assets/js/dashboard.js"></script>
     <script type="module" src="assets/js/dashboard.js"></script>
 </body>
 </html>
