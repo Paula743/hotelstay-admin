@@ -27,6 +27,17 @@
                     <span id="userWelcome" class="text-white fw-medium small">
                         👋 ¡Bienvenid@!
                     </span>
+                    <button 
+                        class="btn btn-outline-light position-relative rounded-pill px-3 btn-sm"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#reservationsOffcanvas"
+                        aria-controls="reservationsOffcanvas"
+                    >
+                        🛎️ Mis Selecciones
+                        <span id="reservationCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            0
+                        </span>
+                    </button>
                     <button id="logoutBtn" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm">
                         Cerrar Sesión
                     </button>
@@ -132,6 +143,33 @@
                         <button type="submit" id="saveProfileBtn" class="btn btn-primary rounded-pill">Guardar Cambios</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end border-0 shadow-lg" tabindex="-1" id="reservationsOffcanvas" aria-labelledby="reservationsOffcanvasLabel">
+        <div class="offcanvas-header border-bottom bg-dark text-white">
+            <h5 class="offcanvas-title fw-bold" id="reservationsOffcanvasLabel">🛎️ Tu Estadía</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+    
+        <div class="offcanvas-body d-flex flex-column p-4">
+            <div id="reservationItems" class="flex-grow-1 overflow-y-auto mb-3"></div>
+
+            <div id="reservationsEmpty" class="text-center py-5 my-auto text-muted"></div>
+
+            <div class="mt-auto border-top pt-3 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted fw-medium">Total Estimado:</span>
+                    <span id="reservationTotal" class="fs-3 fw-bold text-dark">$0</span>
+                </div>
+            
+                <button id="checkoutReservationsBtn" class="btn btn-primary w-100 py-2 rounded-3 fw-medium shadow-sm mb-2">
+                    Proceder al Pago 💳
+                </button>
+                <button id="clearReservationsBtn" class="btn btn-outline-secondary w-100 py-2 rounded-3 fw-medium border-0">
+                    Vaciar Selección 🚮
+                </button>
             </div>
         </div>
     </div>

@@ -79,7 +79,7 @@ addRoomForm?.addEventListener('submit', async (event) => {
         floor,
         pricePerNight,
         status,
-        role: "client",
+        role: "customer",
         active: true,
         createdAt: new Date(),
         updatedAt: new Date()

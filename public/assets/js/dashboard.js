@@ -13,7 +13,7 @@ import { db } from "./firebase.js";
 const welcomeSpan = document.getElementById('userWelcome');
 const logoutBtn = document.getElementById('logoutBtn');
 
-//Constantes para edición de Perfil
+// Constantes para edición de Perfil
 const editProfileBtn = document.getElementById('editProfileBtn');
 const editProfileModalElement = document.getElementById('editProfileModal');
 const editProfileForm = document.getElementById('editProfileForm');
@@ -147,6 +147,7 @@ editProfileForm?.addEventListener('submit', async (event) => {
 });
 
 const hoy = new Date().toISOString().split('T')[0];
+
 if (checkInInput) {
     checkInInput.min = hoy;
     
@@ -259,7 +260,13 @@ function renderRoomCards(roomTypes) {
                                 <span class="fs-4 fw-bold text-primary">$${room.finalPrice}</span>
                                 <small class="text-muted text-uppercase d-block" style="font-size: 10px;">Por noche</small>
                             </div>
-                            <button class="btn btn-dark btn-sm rounded-pill px-4 fw-medium" data-id="${room.id}">
+                            <button 
+                                class="btn btn-dark btn-sm rounded-pill px-4 fw-medium add-to-cart-btn" 
+                                data-id="${room.id}"
+                                data-name="${room.name}"
+                                data-price="${room.finalPrice}"
+                                data-capacity="${room.capacity}"
+                            >
                                 Reservar
                             </button>
                         </div>
@@ -276,7 +283,6 @@ searchRoomsForm?.addEventListener('submit', async (e) => {
 
     const checkIn = checkInInput?.value;
     const checkOut = checkOutInput?.value;
-    // Leemos el valor del input numérico y lo transformamos a un entero base 10
     const guestsNeeded = parseInt(guestsInput?.value || "1", 10);
 
     if (!checkIn || !checkOut) {
@@ -294,3 +300,151 @@ searchRoomsForm?.addEventListener('submit', async (e) => {
     }
     await loadAvailableRooms(guestsNeeded);
 });
+
+let cartReservations = JSON.parse(localStorage.getItem('cartReservations')) || [];
+
+function addToCart(room) {
+    const fechaCheckIn = checkInInput.value;
+    const fechaCheckOut = checkOutInput.value;
+    const nochesCalculadas = calculateSelectedNights();
+
+    const huespedes = parseInt(guestsInput?.value || "1", 10);
+
+    cartReservations = []; 
+
+    cartReservations.push({ 
+        ...room, 
+        nights: nochesCalculadas,
+        checkIn: fechaCheckIn,   
+        checkOut: fechaCheckOut,
+        guests: huespedes
+    });
+    
+    localStorage.setItem('cartReservations', JSON.stringify(cartReservations));
+    updateCartUI();
+
+    const offcanvasElement = document.getElementById('reservationsOffcanvas');
+    if (offcanvasElement) {
+        const instance = bootstrap.Offcanvas.getOrCreateInstance(offcanvasElement);
+        instance.show();
+    }
+}
+
+function updateCartUI() {
+    const reservationItems = document.getElementById('reservationItems');
+    const reservationsEmpty = document.getElementById('reservationsEmpty');
+    const reservationCount = document.getElementById('reservationCount');
+    const reservationTotal = document.getElementById('reservationTotal');
+    const checkoutBtn = document.getElementById('checkoutReservationsBtn');
+
+    reservationCount.textContent = cartReservations.length;
+
+    if (cartReservations.length === 0) {
+        reservationsEmpty.classList.remove('d-none');
+        reservationItems.innerHTML = '';
+        reservationTotal.textContent = '$0';
+        checkoutBtn.disabled = true;
+        return;
+    }
+
+    reservationsEmpty.classList.add('d-none');
+    checkoutBtn.disabled = false;
+    
+    let total = 0;
+    reservationItems.innerHTML = '';
+
+    cartReservations.forEach((item, index) => {
+        const itemTotal = item.basePrice * item.nights;
+        total += itemTotal;
+
+    reservationItems.innerHTML += `
+        <div class="card mb-3 border-0 bg-light rounded-3 p-3 position-relative">
+            <button onclick="removeFromCart(${index})" class="btn-close position-absolute top-0 end-0 m-2" style="font-size: 0.8rem;"></button>
+            <h6 class="fw-bold mb-1">${item.name}</h6>
+            <small class="text-muted d-block mb-2">Máximo: ${item.capacity} personas</small>
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-primary">$${item.basePrice} / noche</span>
+            
+                <div class="input-group input-group-sm" style="width: 120px;">
+                    <span class="input-group-text bg-white small">Noches</span>
+                    <input 
+                        type="number" 
+                        class="form-control text-center bg-white" 
+                        value="${item.nights}" 
+                        disabled
+                    >
+                </div>
+                </div>
+        </div>
+    `;
+    });
+
+    reservationTotal.textContent = `$${total}`;
+}
+
+window.removeFromCart = (index) => {
+    cartReservations.splice(index, 1);
+    localStorage.setItem('cartReservations', JSON.stringify(cartReservations));
+    updateCartUI();
+};
+
+window.updateNights = (index, value) => {
+    cartReservations[index].nights = parseInt(value, 10) || 1;
+    localStorage.setItem('cartReservations', JSON.stringify(cartReservations));
+    updateCartUI();
+};
+
+updateCartUI();
+
+function calculateSelectedNights() {
+    const checkInStr = checkInInput?.value;
+    const checkOutStr = checkOutInput?.value;
+
+    const fechaEntrada = new Date(checkInStr + 'T00:00:00');
+    const fechaSalida = new Date(checkOutStr + 'T00:00:00');
+
+    const diferenciaMilisegundos = fechaSalida - fechaEntrada;
+    const noches = Math.ceil(diferenciaMilisegundos / (1000 * 60 * 60 * 24));
+
+    return noches;
+}
+
+roomsResultsContainer?.addEventListener('click', (e) => {
+    const targetButton = e.target.closest('.add-to-cart-btn');
+    
+    if (targetButton) {
+        const roomData = {
+            id: targetButton.dataset.id,
+            name: targetButton.dataset.name,
+            basePrice: parseFloat(targetButton.dataset.price),
+            capacity: parseInt(targetButton.dataset.capacity, 10)
+        };
+
+        addToCart(roomData);
+
+        const offcanvasElement = document.getElementById('reservationsOffcanvas');
+        if (offcanvasElement) {
+            const instance = bootstrap.Offcanvas.getOrCreateInstance(offcanvasElement);
+            instance.show();
+        }
+    }
+});
+
+document.getElementById('clearReservationsBtn')?.addEventListener('click', () => {
+    cartReservations = [];
+    localStorage.removeItem('cartReservations');
+    updateCartUI();
+});
+
+window.removeFromCart = (index) => {
+    cartReservations.splice(index, 1);
+    localStorage.setItem('cartReservations', JSON.stringify(cartReservations));
+    updateCartUI();
+};
+
+window.updateNights = (index, value) => {
+    const nightsParsed = parseInt(value, 10);
+    cartReservations[index].nights = nightsParsed > 0 ? nightsParsed : 1;
+    localStorage.setItem('cartReservations', JSON.stringify(cartReservations));
+    updateCartUI();
+};

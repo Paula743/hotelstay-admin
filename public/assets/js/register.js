@@ -35,7 +35,7 @@ form?.addEventListener('submit', async (e) => {
         phone,
         address,
         password,
-        role: "client",
+        role: "customer",
         active: true,
         createdAt: new Date(),
         updatedAt: new Date() 
@@ -48,7 +48,7 @@ form?.addEventListener('submit', async (e) => {
         showAlert('errorMessage', 'Cuenta creada con éxito.');
         const alertBox = document.getElementById('errorMessage');
         alertBox?.classList.remove('alert-danger');
-        alertBox?.classList.add('alert-success'); // Transforma la alerta a verde
+        alertBox?.classList.add('alert-success'); 
 
         setTimeout(() => {
             window.location.href = 'dashboard.html'; 
