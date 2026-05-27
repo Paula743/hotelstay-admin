@@ -61,22 +61,25 @@
         </div>
 
         <main class="main-content p-4 flex-grow-1">
-            <div class="text-center">
-                <h1>Nuevo huesped</h1>
+          <div class="d-flex justify-content-between align-items-center py-4 px-3 bg-light">
+            <div>
+              <h1 class="fw-bold fs-2 mb-1">Huéspedes</h1>
+              <p class="text-muted mb-0">Gestión y seguimiento de los visitantes del hotel.</p>
             </div>
-            <div class="d-grid">
+            <div class>
                 <button
                     type="button"
-                    class="btn btn-primary"
+                    class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 fw-semibold"
                     data-bs-toggle="modal"
                     data-bs-target="#addGuestModal"
                     id="openAddGuestBtn"
                 >
-                    <i class="bi bi-plus-lg"></i>
-                    Agregar un nuevo huesped.
+                    <i class="bi bi-plus-circle fs-5"></i>
+                    Registrar Huésped
                 </button>
             </div>
-            <div id="roomsContainer" class="row g-4 mb-4"></div>
+          </div>
+          <div id="roomsContainer" class="row g-4 mb-4"></div>
         </main>
     </div>
 
@@ -100,11 +103,21 @@
         <div class="modal-body pt-3">
           <form id="addGuestForm" novalidate>
             <div class="mb-3">
-              <label for="fullName" class="form-label">Nombre Completo</label>
+              <label for="name" class="form-label">Nombre(s)</label>
               <input
                 type="text"
                 class="form-control form-control-lg"
-                id="fullNameGuest"
+                id="nameGuest"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="apellido" class="form-label">Apellido(s)</label>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="apellidoGuest"
                 required
               >
             </div>
@@ -144,7 +157,7 @@
               <input
                 type="text"
                 class="form-control form-control-lg"
-                id="adressGuest"
+                id="addressGuest"
                 required
               >
             </div>
@@ -152,7 +165,7 @@
             <div class="d-grid">
               <button type="submit" id="saveGuestBtn" class="btn btn-primary btn-lg">
                 <i class="bi bi-check-circle me-2"></i>
-                Registrar huesped
+                Registrar huésped
               </button>
             </div>
           </form>

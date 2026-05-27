@@ -27,8 +27,22 @@
                     <span id="userWelcome" class="text-white fw-medium small">
                         👋 ¡Bienvenid@!
                     </span>
+                    <button 
+                        class="btn btn-outline-light position-relative rounded-pill px-3 btn-sm"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#reservationsOffcanvas"
+                        aria-controls="reservationsOffcanvas"
+                    >
+                        🛎️ Mis Selecciones
+                        <span id="reservationCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            0
+                        </span>
+                    </button>
                     <button id="logoutBtn" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm">
                         Cerrar Sesión
+                    </button>
+                    <button id="editProfileBtn" class="btn btn-outline-light rounded-pill">
+                        Editar perfil
                     </button>
                 </div>
             </div>
@@ -38,8 +52,56 @@
     <header>
     </header>
 
-    <main>
-        
+    <main class="container my-5 flex-grow-1">
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                    <h4 class="fw-bold text-dark mb-4">Introduce las fechas de tu estadía</h4>
+                    
+                    <form id="searchRoomsForm" class="row g-3 align-items-end">
+                        <div class="col-12 col-md-3">
+                            <label for="checkInDate" class="form-label small fw-semibold text-muted">Fecha de Entrada (Check-in)</label>
+                            <input type="date" id="checkInDate" class="form-control form-control-lg rounded-3" required>
+                        </div>
+                        
+                        <div class="col-12 col-md-3">
+                            <label for="checkOutDate" class="form-label small fw-semibold text-muted">Fecha de Salida (Check-out)</label>
+                            <input type="date" id="checkOutDate" class="form-control form-control-lg rounded-3" required>
+                        </div>
+
+                        <div class="col-12 col-md-3">
+                            <label for="guestsCount" class="form-label small fw-semibold text-muted">Huéspedes</label>
+                            <input 
+                                type="number" 
+                                id="guestsCount" 
+                                class="form-control form-control-lg rounded-3 text-center fw-medium" 
+                                value="1" 
+                                min="1" 
+                                max="6" 
+                                required
+                            >
+                        </div>
+                        
+                        <div class="col-12 col-md-3">
+                            <button type="submit" id="searchRoomsBtn" class="btn btn-primary btn-lg w-100 rounded-3 fw-medium shadow-sm">
+                                Buscar Disponibilidad
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 mb-3">
+                <h3 class="fw-bold text-dark d-none" id="resultsTitle">Habitaciones Disponibles</h3>
+                <p class="text-muted small d-none" id="resultsSubtitle">Selecciona el tipo de habitación que mejor se adapte a ti.</p>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="roomsResultsContainer">
+            <div class="col-12 text-center py-5" id="placeholderMessage"></div>
+        </div>
     </main>
 
     <footer class="footer mt-auto py-3 bg-dark text-white-50 text-center">
@@ -47,6 +109,70 @@
             <small>&copy; 2026 HotelStay</small>
         </div>
     </footer>
+
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="editProfileModalLabel">Editar Perfil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editProfileForm">
+                    <div class="modal-body">
+                        <div id="profileMessage" class="alert alert-danger d-none" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label for="editName" class="form-label small fw-medium">Nombre Completo</label>
+                            <input type="text" class="form-control" id="editName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label small fw-medium">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="editEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhone" class="form-label small fw-medium">Número de Teléfono</label>
+                            <input type="text" class="form-control" id="editPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAddress" class="form-label small fw-medium">Dirección</label>
+                            <input type="text" class="form-control" id="editAddress" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" id="saveProfileBtn" class="btn btn-primary rounded-pill">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end border-0 shadow-lg" tabindex="-1" id="reservationsOffcanvas" aria-labelledby="reservationsOffcanvasLabel">
+        <div class="offcanvas-header border-bottom bg-dark text-white">
+            <h5 class="offcanvas-title fw-bold" id="reservationsOffcanvasLabel">🛎️ Tu Estadía</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+    
+        <div class="offcanvas-body d-flex flex-column p-4">
+            <div id="reservationItems" class="flex-grow-1 overflow-y-auto mb-3"></div>
+
+            <div id="reservationsEmpty" class="text-center py-5 my-auto text-muted"></div>
+
+            <div class="mt-auto border-top pt-3 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted fw-medium">Total Estimado:</span>
+                    <span id="reservationTotal" class="fs-3 fw-bold text-dark">$0</span>
+                </div>
+            
+                <button id="checkoutReservationsBtn" class="btn btn-primary w-100 py-2 rounded-3 fw-medium shadow-sm mb-2">
+                    Proceder al Pago 💳
+                </button>
+                <button id="clearReservationsBtn" class="btn btn-outline-secondary w-100 py-2 rounded-3 fw-medium border-0">
+                    Vaciar Selección 🚮
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="assets/js/dashboard.js"></script>

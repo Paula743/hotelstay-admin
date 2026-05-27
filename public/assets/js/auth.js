@@ -12,6 +12,7 @@ import {
   updateDoc,
   collection, 
   addDoc,
+
   getDocs,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
@@ -77,7 +78,24 @@ export async function logoutUser() {
   await signOut(auth);
 }
 
-export async function addTypeRoom({ name, capacity, description, basePrice }) {
+export async function getCurrentUserProfile(uid) {
+  const ref = doc(db, "users", uid);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) return null;
+
+  return snap.data();
+}
+
+export async function updateCurrentProfile(uid, data) {
+  const user = doc(db, 'users', uid)
+  await updateDoc(user, {
+    ...data,
+    updatedAt: serverTimestamp()
+  });
+}
+
+export async function addTypeRoom({ name, capacity, description, basePrice, image }) {
   try {
     const typeRoomsRef = collection(db, "typeRooms");
     const newDocRef = doc(typeRoomsRef);
@@ -87,6 +105,7 @@ export async function addTypeRoom({ name, capacity, description, basePrice }) {
       capacity: capacity,
       description: description || "",
       basePrice: basePrice,
+      image: image,
       createdAt: serverTimestamp()
     });
     return newDocRef.id; 
@@ -104,6 +123,7 @@ export async function addRoom({ roomNumber, typeId, floor, pricePerNight, status
     const docRef = doc(roomsRef);
 
     await setDoc(docRef, {
+      roomId: docRef.id,
       roomNumber: roomNumber,
       typeId: typeId,
       floor: floor,
@@ -122,12 +142,13 @@ export async function addRoom({ roomNumber, typeId, floor, pricePerNight, status
   }
 }
 
+// función que obtiene los tipos de habitación
 export async function getRoomTypes() {
   try {
     const querySnapshot = await getDocs(collection(db, "typeRooms"));
     const tipos = [];
     
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((doc) => { 
       tipos.push({ id: doc.id, ...doc.data() });
     });
     
@@ -138,30 +159,31 @@ export async function getRoomTypes() {
   }
 }
 
-export async function addGuest({fullName, email, phone, identification, address, active = true}){
+export async function addGuest({ name, apellido, email, phone, identification, address, active = true }) {
   try {
+  
     const guestRef = collection(db, "guests");
-    const newDocGuestRef = doc(guestRef);
+    const docGuestRef = doc(guestRef);
 
-    await setDoc(newDocGuestRef, {
-      guest_Id: newDocGuestRef.id,
-      name: fullName,
-      email,          // Sintaxis corta (shorthand)
-      phone,
-      identification,
-      address,
-      active,         // Si no se envía, por defecto será true
+    await setDoc(docGuestRef, {
+      guestId: docGuestRef.id,
+      name: name,
+      apellido: apellido,
+      email: email,
+      phone: phone,
+      identification: identification,
+      address: address,          
+      active: active,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
 
-    return newDocGuestRef.id;
-
+    return docGuestRef.id; 
+    
   } catch (error) {
-    console.error("Error al agregar al nuevo huésped:", error);
+    console.error("Error al agregar el huésped:", error);
     throw error; 
   }
-
 }
 
 

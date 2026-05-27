@@ -1,15 +1,29 @@
+<<<<<<< HEAD
 import { hideAlert, showAlert, getFirebaseErrorMessage, observeAuth, logoutUser, setButtonLoading, addGuest } from "./auth.js";
 import { doc, getDoc, collection, getDocs, where, query } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+=======
+import { observeAuth, logoutUser, setButtonLoading, addGuest } from "./auth.js";
+import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+>>>>>>> develop
 import { db } from "./firebase.js";
 
 const logoutBtn = document.getElementById('logoutBtn');
 
 const addGuestForm = document.getElementById('addGuestForm')
+<<<<<<< HEAD
 const nameInput = document.getElementById('fullNameGuest') 
 const emailGuestInput = document.getElementById('emailGuest') 
 const phoneGuestInput = document.getElementById('phoneGuest') 
 const identificationGuestInput = document.getElementById('identificationGuest') 
 const adressGuestInput = document.getElementById('adressGuest')
+=======
+const nameGuestInput = document.getElementById('nameGuest')
+const apellidoGuestInput = document.getElementById('apellidoGuest')  
+const emailGuestInput = document.getElementById('emailGuest') 
+const phoneGuestInput = document.getElementById('phoneGuest') 
+const identificationGuestInput = document.getElementById('identificationGuest') 
+const addressGuestInput = document.getElementById('addressGuest')
+>>>>>>> develop
 
 const openAddGuestBtn = document.getElementById('openAddGuestBtn')
 const saveGuestBtn = document.getElementById('saveGuestBtn') 
@@ -45,6 +59,7 @@ logoutBtn?.addEventListener('click', async () => {
 });
 
 addGuestForm?.addEventListener('submit', async (event) => {
+<<<<<<< HEAD
     event.preventDefault()
 
     const nameGuest = nameInput.value.trim()
@@ -166,3 +181,68 @@ async function loadRooms() {
     }
 }
 */
+=======
+  event.preventDefault()
+
+  const name = nameGuestInput.value.trim()
+  const apellido = apellidoGuestInput.value.trim()
+  const email = emailGuestInput.value.trim()
+  const phone = phoneGuestInput.value.trim()
+  const identification = identificationGuestInput.value.trim()
+  const address = addressGuestInput.value.trim()
+
+  if (!name || !apellido || !email || !phone || !identification || !address) {
+          alert('Todos los campos son obligatorios para el registro.');
+          return;
+  }
+
+  if(phone.length != 10){
+    alert('Cantidad de digitos erronea en el telefono');
+    return;
+  }
+
+  const q = query(collection(db, 'guests'), where('phone', '==',phone))
+  const phoneExistente = await getDocs(q)
+
+  if(!phoneExistente.empty){
+        alert('Este número telefonico ya está registrada en el sistema')
+        return
+  }
+
+
+ 
+  try {
+    setButtonLoading(
+      saveGuestBtn,
+      true,
+      '<i class="bi bi-check-circle me-2"></i> Registrar huésped',
+      'Registrando...'
+    )
+
+    await addGuest({ 
+      name,
+      apellido,
+      email,
+      phone,
+      identification,
+      address,
+      active: true
+       
+    })
+
+    setTimeout(() => {
+      addGuestModal?.hide()
+      addGuestForm.reset() 
+    }, 100)
+
+  } catch (error) {
+    alert( 'No se pudo registrar el tipo de habitación')
+  } finally {
+    setButtonLoading(
+      saveGuestBtn,
+      false,
+      '<i class="bi bi-check-circle me-2"></i> Registrar huésped' 
+    )
+  }
+});
+>>>>>>> develop

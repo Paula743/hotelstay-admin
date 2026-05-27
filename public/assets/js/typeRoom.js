@@ -1,5 +1,5 @@
 import { observeAuth, logoutUser, setButtonLoading, addTypeRoom } from "./auth.js";
-import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 import { db } from "./firebase.js";
 
 const logoutBtn = document.getElementById('logoutBtn');
@@ -8,7 +8,8 @@ const addTypeRoomForm = document.getElementById('addTypeRoomForm')
 const nameCategory = document.getElementById('nameCategory') 
 const capacityInput = document.getElementById('capacity') 
 const descriptionInput = document.getElementById('description') 
-const basePriceInput = document.getElementById('basePrice') 
+const basePriceInput = document.getElementById('basePrice')
+const imageCategoryInput = document.getElementById('image') 
 const openAddTypeRoomBtn = document.getElementById('openAddTypeRoomBtn')
 const saveTypeRoomBtn = document.getElementById('saveTypeRoomBtn') 
 
@@ -49,30 +50,41 @@ addTypeRoomForm?.addEventListener('submit', async (event) => {
   const capacityValue = capacityInput.value.trim()
   const description = descriptionInput.value.trim()
   const basePrice = basePriceInput.value.trim()
+  const image = imageCategoryInput ? imageCategoryInput.value.trim() : ""
 
-  if (!name || !capacityValue || !description || !basePrice) {
+  if (!name || !capacityValue || !description || !basePrice || !image) {
           showAlert('errorMessage', 'Todos los campos son obligatorios para el registro.');
           return;
+  }
+
+  const q = query(collection(db, 'typeRooms'), where('name', '==',name))
+  const nameExistente = await getDocs(q)
+
+  if(!nameExistente.empty){
+        alert('Esta categoría ya está registrada en el sistema')
+        return
   }
  
   try {
     setButtonLoading(
       saveTypeRoomBtn,
       true,
-      '<i class="bi bi-check-circle me-2"></i> Guardar Cambios',
-      'Guardando...'
+      '<i class="bi bi-check-circle me-2"></i> Registrar',
+      'Registrando...'
     )
 
     await addTypeRoom({ 
       name, 
       capacity: parseInt(capacityValue, 10), 
       description, 
-      basePrice: parseFloat(basePrice) 
+      basePrice: parseFloat(basePrice),
+      image
     })
 
     setTimeout(() => {
       addTypeRoomModal?.hide()
-      addTypeRoomForm.reset() 
+      addTypeRoomForm.reset()
+      loadRoomTypes();
     }, 1500)
 
   } catch (error) {
@@ -81,7 +93,7 @@ addTypeRoomForm?.addEventListener('submit', async (event) => {
     setButtonLoading(
       saveTypeRoomBtn,
       false,
-      '<i class="bi bi-check-circle me-2"></i> Guardar Cambios' 
+      '<i class="bi bi-check-circle me-2"></i> Registrar' 
     )
   }
 });
@@ -100,6 +112,8 @@ async function loadRoomTypes() {
 
         querySnapshot.forEach((doc) => {
             const roomType = doc.data();
+            const imgUrl = roomType.image;
+
             roomTypesContainer.innerHTML += `
 
             <div class="col-md-4">
