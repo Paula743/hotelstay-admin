@@ -42,40 +42,40 @@
     </header>
 
     <main class="container my-5 flex-grow-1">
-    <div class="row mb-5">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
-                <h4 class="fw-bold text-dark mb-4">Introduce las fechas de tu estadía</h4>
-                
-                <form id="searchRoomsForm" class="row g-3 align-items-end">
-                    <div class="col-12 col-md-4">
-                        <label for="checkInDate" class="form-label small fw-semibold text-muted">Fecha de Entrada (Check-in)</label>
-                        <input type="date" id="checkInDate" class="form-control form-control-lg rounded-3" required>
-                    </div>
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                    <h4 class="fw-bold text-dark mb-4">Introduce las fechas de tu estadía</h4>
                     
-                    <div class="col-12 col-md-4">
-                        <label for="checkOutDate" class="form-label small fw-semibold text-muted">Fecha de Salida (Check-out)</label>
-                        <input type="date" id="checkOutDate" class="form-control form-control-lg rounded-3" required>
-                    </div>
-                    
-                    <div class="col-12 col-md-4">
-                        <button type="submit" id="searchRoomsBtn" class="btn btn-primary btn-lg w-100 rounded-3 fw-medium shadow-sm">
-                            Buscar Disponibilidad
-                        </button>
-                    </div>
-                </form>
+                    <form id="searchRoomsForm" class="row g-3 align-items-end">
+                        <div class="col-12 col-md-4">
+                            <label for="checkInDate" class="form-label small fw-semibold text-muted">Fecha de Entrada (Check-in)</label>
+                            <input type="date" id="checkInDate" class="form-control form-control-lg rounded-3" required>
+                        </div>
+                        
+                        <div class="col-12 col-md-4">
+                            <label for="checkOutDate" class="form-label small fw-semibold text-muted">Fecha de Salida (Check-out)</label>
+                            <input type="date" id="checkOutDate" class="form-control form-control-lg rounded-3" required>
+                        </div>
+                        
+                        <div class="col-12 col-md-4">
+                            <button type="submit" id="searchRoomsBtn" class="btn btn-primary btn-lg w-100 rounded-3 fw-medium shadow-sm">
+                                Buscar Disponibilidad
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-12 mb-3">
-            <h3 class="fw-bold text-dark d-none" id="resultsTitle">Habitaciones Disponibles</h3>
-            <p class="text-muted small d-none" id="resultsSubtitle">Selecciona el tipo de habitación que mejor se adapte a ti.</p>
+        <div class="row">
+            <div class="col-12 mb-3">
+                <h3 class="fw-bold text-dark d-none" id="resultsTitle">Habitaciones Disponibles</h3>
+                <p class="text-muted small d-none" id="resultsSubtitle">Selecciona el tipo de habitación que mejor se adapte a ti.</p>
+            </div>
         </div>
-    </div>
 
-</main>
+    </main>
 
     <footer class="footer mt-auto py-3 bg-dark text-white-50 text-center">
         <div class="container">
