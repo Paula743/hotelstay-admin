@@ -1,11 +1,8 @@
 import { observeAuth, logoutUser, setButtonLoading, addGuest } from "./auth.js";
-import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { doc, getDoc, collection, getDocs, query, where, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 import { db } from "./firebase.js";
 
-const addBookingBtn = document.getElementById('addBookingBtn');
-const addBookingModalElement = document.getElementById('addBookingModal');
 
-const addBookingModal = addBookingModalElement ? bootstrap.Modal.getOrCreateInstance(addBookingModalElement) : null;
 
 const reservationModalElement = document.getElementById('reservationModal');
 const reservationModal = reservationModalElement ? bootstrap.Modal.getOrCreateInstance(reservationModalElement) : null;
@@ -14,22 +11,23 @@ const searchRoomsForm = document.getElementById('searchRoomsForm');
 const availableRoomsContainer = document.getElementById('availableRoomsContainer');
 const checkInDateInput = document.getElementById('checkInDate');
 const checkOutDateInput = document.getElementById('checkOutDate');
+const guestCountInput = document.getElementById('guestCount');
 
 const guestEmailInput = document.getElementById('guestEmail');
 const guestNameInput = document.getElementById('guestName');
 const guestApellidoInput = document.getElementById('guestApellido');
 const guestPhoneInput = document.getElementById('guestPhone');
 
+const reservationForm = document.getElementById('reservationForm');
+let selectedRoomId = null;
 
-addBookingBtn?.addEventListener('click', () => {
-  addBookingModal?.show();
-});
 
 
 searchRoomsForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   try {
+    const guestCount = Number(guestCountInput.value);
     const checkIn = checkInDateInput.value;
     const checkOut = checkOutDateInput.value;
 
@@ -85,7 +83,7 @@ searchRoomsForm?.addEventListener('submit', async (e) => {
         room => room.typeId === typeDoc.id
       );
 
-      if (hasAvailableRoom) {
+      if (hasAvailableRoom && roomType.capacity >= guestCount) {
         availableRoomTypes.push({
           id: typeDoc.id,
           ...roomType
@@ -152,12 +150,9 @@ searchRoomsForm?.addEventListener('submit', async (e) => {
           </div>
         </div>
       `;
-    });
 
-    setTimeout(() => {
-      addBookingModal?.hide()
-      searchRoomsForm.reset() 
-    }, 100)
+      //searchRoomsForm.reset();
+    });
 
   } catch (error) {
 
@@ -175,15 +170,35 @@ document.addEventListener('click', (e) => {
 
   if (e.target.classList.contains('reserveBtn')) {
 
+    selectedRoomId = e.target.dataset.roomid;
+
     const roomNumber = e.target.dataset.roomnumber;
     const floor = e.target.dataset.floor;
-    const price = e.target.dataset.price;
+    const price = Number(e.target.dataset.price);
     const type = e.target.dataset.type;
+    const checkIn = checkInDateInput.value;
+    const checkOut = checkOutDateInput.value;
+    const guests = guestCountInput.value;
+
+    const start = new Date(checkIn);
+    const end = new Date(checkOut);
+    const diffTime = end - start;
+
+    const nights = Math.ceil(
+        diffTime / (1000 * 60 * 60 * 24)
+    );
+
+    const total = nights * price;
 
     document.getElementById('reservationRoomNumber').value = roomNumber;
     document.getElementById('reservationRoomType').value = type;
     document.getElementById('reservationFloor').value = floor;
     document.getElementById('reservationPrice').value = `$${price}`;
+    document.getElementById('reservationCheckIn').value = checkIn;
+    document.getElementById('reservationCheckOut').value = checkOut;
+    document.getElementById('reservationGuests').value = guests;
+    document.getElementById('reservationNights').value = `${nights} noche(s)`;
+    document.getElementById('reservationTotal').value = `$${total}`;
 
     reservationModal.show();
   }
@@ -244,3 +259,53 @@ if (checkInDateInput) {
         }
     });
 }
+
+reservationForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+        const email = guestEmailInput.value.trim();
+        const q = query(collection(db, 'guests'), where('email', '==', email));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            alert('El huésped no existe');
+            return;
+        }
+
+        const guestDoc = querySnapshot.docs[0];
+        const guestId = guestDoc.id;
+        const checkInDate = document.getElementById('reservationCheckIn').value.trim();
+        const checkOutDate = document.getElementById('reservationCheckOut').value.trim();
+        const pricePerNight = Number(document.getElementById('reservationPrice').value.replace('$', ''));
+        const nights = parseInt(document.getElementById('reservationNights').value);
+        const guests = Number(document.getElementById('reservationGuests').value);
+        const total = nights * pricePerNight;
+
+        // Guardar reserva
+        await addDoc(collection(db, 'reservations'), {
+            guestId: guestId,
+            guests: guests,
+            roomId: selectedRoomId,
+            checkInDate: checkInDate,
+            checkOutDate: checkOutDate,
+            nights: nights,
+            pricePerNight: pricePerNight,
+            total: total,
+            status: 'reserved',
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+        });
+
+        alert('Reservación creada correctamente');
+        reservationForm.reset();
+        reservationModal.hide();
+        availableRoomsContainer.innerHTML = '';
+
+    } catch (error) {
+        console.error(
+            'Error al guardar reservación:',
+            error
+        );
+        alert('Ocurrió un error al guardar');
+    }
+});

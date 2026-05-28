@@ -66,6 +66,7 @@
                     <h1 class="fw-bold fs-2 mb-1">Reservaciones</h1>
                     <p class="text-muted mb-0">Administra y gestiona las reservaciones pendientes.</p>
                     </div>
+                    <!--
                     <div>
                         <button
                             type="button"
@@ -76,14 +77,57 @@
                             <i class="bi bi-plus-circle fs-5"></i>
                             Realizar Reservación
                         </button>
-                    </div>
+                    </div>-->
+                    
             </div>    
             
-            <div id="availableRoomsContainer" class="mt-4"></div>
             
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mt-3">
+                <h4 class="fw-bold text-dark mb-3">
+                    Buscar disponibilidad
+                </h4>
+                <form id="searchRoomsForm" class="row g-3 align-items-end">
+                    <div class="col-12 col-md-3">
+
+                        <label for="checkInDate" class="form-label small fw-semibold text-muted">
+                            Fecha de Entrada
+                        </label>
+
+                        <input type="date" id="checkInDate" class="form-control form-control-lg rounded-3" required>
+                    </div>
+
+                    <div class="col-12 col-md-3">
+                        <label for="checkOutDate" class="form-label small fw-semibold text-muted">
+                            Fecha de Salida
+                        </label>
+
+                        <input type="date" id="checkOutDate" class="form-control form-control-lg rounded-3" required>
+                    </div>
+
+                    <div class="col-12 col-md-3">
+
+                        <label for="guestCount" class="form-label small fw-semibold text-muted">
+                            Número de huéspedes
+                        </label>
+
+                        <input type="number" id="guestCount" class="form-control form-control-lg rounded-3" min="1" value="1" required>
+                    </div>
+
+                    <div class="col-12 col-md-3">
+                        <button type="submit" id="searchRoomsBtn" class="btn btn-primary btn-lg w-100 rounded-3 fw-medium shadow-sm">
+                            <i class="bi bi-search"></i>
+                                Buscar Disponibilidad
+                        </button>
+                    </div>
+                    
+                </form>
+            </div>
+
+            <div id="availableRoomsContainer" class="mt-4"></div>
         </main>
     </div>
 
+    <!--
     <div class="modal fade" id="addBookingModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content border-0 shadow-lg rounded-4">
@@ -151,7 +195,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 
     <div class="modal fade" id="reservationModal" tabindex="-1">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -195,6 +239,46 @@
                                         <label class="form-label fw-semibold"> Precio por noche </label>
 
                                         <input type="text" id="reservationPrice" class="form-control" readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            Fecha de entrada
+                                        </label>
+
+                                        <input type="text" id="reservationCheckIn" class="form-control" readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            Fecha de salida
+                                        </label>
+
+                                        <input type="text" id="reservationCheckOut" class="form-control" readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            Número de huéspedes
+                                        </label>
+
+                                        <input type="text" id="reservationGuests" class="form-control" readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            Noches de estadía
+                                        </label>
+
+                                        <input type="text" id="reservationNights" class="form-control" readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            Total a pagar
+                                        </label>
+
+                                        <input type="text" id="reservationTotal" class="form-control fw-bold text-success" readonly>
                                     </div>
 
                                 </div>
