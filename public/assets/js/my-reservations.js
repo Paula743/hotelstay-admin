@@ -95,24 +95,26 @@ async function loadUserReservations() {
                             </div>
 
                             ${!esCancelada ? `
-                                <div class="mt-auto pt-3 border-top d-flex gap-2 align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center gap-2">
+                                <div class="mt-auto pt-3 border-top d-flex flex-column flex-md-row gap-3 align-items-stretch align-items-md-center justify-content-between">
+        
+                                    <div class="d-flex align-items-center justify-content-between justify-content-md-start gap-2">
                                         <label class="small text-muted mb-0" style="font-size: 11px;">👥 Huéspedes:</label>
                                         <input type="number" 
-                                               class="form-control form-control-sm text-center fw-bold bg-light" 
-                                               id="guestsInput_${idReserva}" 
-                                               value="${reserva.guests || 1}" 
-                                               min="1" 
-                                               max="${categoriaCuarto.capacity}" 
-                                               style="width: 65px; border-radius: 8px;">
+                                            class="form-control form-control-sm text-center fw-bold bg-light" 
+                                            id="guestsInput_${idReserva}" 
+                                            value="${reserva.guests || 1}" 
+                                            min="1" 
+                                            max="${categoriaCuarto.capacity}" 
+                                            style="width: 65px; border-radius: 8px;">
                                     </div>
+        
                                     <div class="d-flex gap-2">
-                                        <button class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-medium btn-edit-guests" 
+                                        <button class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-medium btn-edit-guests flex-grow-1 flex-md-grow-0" 
                                                 data-id="${idReserva}" 
                                                 data-max="${categoriaCuarto.capacity}">
                                             Guardar 💾 
                                         </button>
-                                        <button class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-medium btn-cancel-reserva" 
+                                        <button class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-medium btn-cancel-reserva flex-grow-1 flex-md-grow-0" 
                                                 data-id="${idReserva}">
                                             Cancelar Reservación
                                         </button>
@@ -120,7 +122,7 @@ async function loadUserReservations() {
                                 </div>
                             ` : `
                                 <div class="mt-auto pt-3 border-top text-center">
-                                    <p class="text-danger small mb-0 fw-medium">Esta reservación fue cancelada y a habitación ha sido liberada.</p>
+                                    <p class="text-danger small mb-0 fw-medium">Esta reservación fue cancelada y la habitación ha sido liberada.</p>
                                 </div>
                             `}
                         </div>
