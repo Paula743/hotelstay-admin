@@ -17,16 +17,22 @@ observeAuth(async (user) => {
         window.location.href = 'index.html';
     } else {
         currentUserSession = user;
-        
-        loadUserReservations(); 
 
         try {
             const userData = await getCurrentUserProfile(user.uid);
+            
+            if (userData && (userData.role === 'admin' || userData.isAdmin === true)) {
+                window.location.href = 'admin-dashboard.html'; 
+                return; 
+            }
+            loadUserReservations(); 
+
             if (userData && welcomeSpan) {
                 welcomeSpan.textContent = `👋 ¡Bienvenid@, ${userData.fullName || 'Usuario'}!`;
             }
         } catch (error) {
-            console.error("Error al obtener los datos de perfil:", error);
+            console.error("Error al obtener los datos de perfil o validar rol:", error);
+            window.location.href = 'index.html';
         }
     }
 });
