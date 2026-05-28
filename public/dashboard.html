@@ -24,32 +24,47 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <div class="d-flex align-items-center gap-3">
-                    <span id="userWelcome" class="text-white fw-medium small">
-                        👋 ¡Bienvenid@!
-                    </span>
-                    <button 
-                        class="btn btn-outline-light position-relative rounded-pill px-3 btn-sm"
-                        data-bs-toggle="offcanvas"
-                        data-bs-target="#reservationsOffcanvas"
-                        aria-controls="reservationsOffcanvas"
-                    >
-                        🛎️ Mis Selecciones
-                        <span id="reservationCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            0
+            
+                <div class="row d-lg-flex align-items-lg-center g-2 gap-lg-3 mt-3 mt-lg-0 w-100 justify-content-lg-end">
+                
+                    <div class="col-12 col-lg-auto text-center text-lg-start mb-2 mb-lg-0">
+                        <span id="userWelcome" class="text-white fw-medium small">
+                            👋 ¡Bienvenid@!
                         </span>
-                    </button>
+                    </div>
 
-                    <a href="./my-reservations.html" class="btn btn-outline-light position-relative rounded-pill px-3 btn-sm">
-                        📋 Mis reservaciones
-                    </a>
+                    <div class="col-6 col-lg-auto">
+                        <button 
+                            class="btn btn-outline-light position-relative rounded-pill px-2 px-lg-3 btn-sm w-100"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#reservationsOffcanvas"
+                            aria-controls="reservationsOffcanvas"
+                        >
+                            🛎️ Mis Selecciones
+                            <span id="reservationCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                0
+                            </span>
+                        </button>
+                    </div>
 
-                    <button id="logoutBtn" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm">
-                        Cerrar Sesión
-                    </button>
-                    <button id="editProfileBtn" class="btn btn-outline-light position-relative rounded-pill px-3 btn-sm">
-                        Editar perfil
-                    </button>
+                    <div class="col-6 col-lg-auto">
+                        <a href="./my-reservations.html" class="btn btn-outline-light position-relative rounded-pill px-2 px-lg-3 btn-sm w-100 text-center">
+                            📋 Reservaciones
+                        </a>
+                    </div>
+
+                    <div class="col-6 col-lg-auto">
+                        <button id="logoutBtn" class="btn btn-danger btn-sm rounded-pill px-2 px-lg-3 shadow-sm w-100">
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                
+                    <div class="col-6 col-lg-auto">
+                        <button id="editProfileBtn" class="btn btn-outline-light position-relative rounded-pill px-2 px-lg-3 btn-sm w-100">
+                            Editar perfil
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -114,6 +129,7 @@
         </div>
     </footer>
 
+    <!-- Modal para Edición de Perfil -->
     <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
