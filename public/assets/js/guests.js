@@ -19,6 +19,11 @@ const saveGuestBtn = document.getElementById('saveGuestBtn')
 const addGuestModalElement = document.getElementById('addGuestModal')
 const addGuestModal = addGuestModalElement ? bootstrap.Modal.getOrCreateInstance(addGuestModalElement) : null
 
+const guestsTableBody = document.getElementById('guestsTableBody');
+const searchGuestInput = document.getElementById('searchGuest');
+
+let allGuests = [];
+
 observeAuth(async (user) => {
     if (!user) {
         window.location.href = 'login.html';
@@ -109,5 +114,84 @@ addGuestForm?.addEventListener('submit', async (event) => {
       '<i class="bi bi-check-circle me-2"></i> Registrar huésped' 
     )
   }
+});
+
+
+searchGuestInput?.addEventListener('input', (e) => {
+
+  const text = e.target.value.toLowerCase();
+
+  const filteredGuests = allGuests.filter((guest) =>
+    guest.name.toLowerCase().includes(text)
+  );
+
+  renderGuests(filteredGuests);
+});
+
+
+
+const loadGuests = async () => {
+  try {
+
+    const guestsSnapshot = await getDocs(collection(db, "guests"));
+
+    guestsTableBody.innerHTML = '';
+
+    if (guestsSnapshot.empty) {
+      guestsTableBody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center">
+            No hay huéspedes registrados
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    allGuests = [];
+
+    guestsSnapshot.forEach((doc) => {
+      allGuests.push(doc.data());
+    });
+
+    const renderGuests = (guests) => {
+
+      guestsTableBody.innerHTML = '';
+
+      guests.forEach((guest) => {
+
+        guestsTableBody.innerHTML += `
+          <tr>
+            <td>${guest.name}</td>
+            <td>${guest.apellido}</td>
+            <td>${guest.email}</td>
+            <td>${guest.phone}</td>
+            <td>${guest.identification}</td>
+            <td>${guest.address}</td>
+          </tr>
+        `;
+      });
+    };
+
+    renderGuests(allGuests);
+
+    searchGuestInput?.addEventListener('input', (e) => {
+
+      const text = e.target.value.toLowerCase();
+
+      const filteredGuests = allGuests.filter((guest) =>
+        guest.name.toLowerCase().includes(text)
+      );
+
+      renderGuests(filteredGuests);
+    });
+
+  } catch (error) {
+    console.error('Error al cargar huéspedes:', error);
+  }
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadGuests();
 });
 

@@ -89,7 +89,31 @@
                 </button>
             </div>
           </div>
-          <div id="roomsContainer" class="row g-4 mb-4"></div>
+
+          
+          <div class="mb-3">
+            <input
+              type="text"
+              id="searchGuest"
+              class="form-control"
+              placeholder="Buscar huésped"
+            >
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Identificación</th>
+                <th>Dirección</th>
+              </tr>
+            </thead>
+
+            <tbody id="guestsTableBody"></tbody>
+          </table>
+          
         </main>
     </div>
 
