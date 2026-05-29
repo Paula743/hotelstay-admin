@@ -350,7 +350,7 @@ async function loadReservations() {
 
                 if (guestSnap.exists()) {
                     const guest = guestSnap.data();
-                    guestName = `${guest.name} ${guest.apellido}`;
+                    guestName = `${guest.name}`;
                 }
             }
 

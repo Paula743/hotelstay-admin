@@ -6,7 +6,6 @@ const logoutBtn = document.getElementById('logoutBtn');
 
 const addGuestForm = document.getElementById('addGuestForm')
 const nameGuestInput = document.getElementById('nameGuest')
-const apellidoGuestInput = document.getElementById('apellidoGuest')  
 const emailGuestInput = document.getElementById('emailGuest') 
 const phoneGuestInput = document.getElementById('phoneGuest') 
 const identificationGuestInput = document.getElementById('identificationGuest') 
@@ -54,13 +53,12 @@ addGuestForm?.addEventListener('submit', async (event) => {
   event.preventDefault()
 
   const name = nameGuestInput.value.trim()
-  const apellido = apellidoGuestInput.value.trim()
   const email = emailGuestInput.value.trim()
   const phone = phoneGuestInput.value.trim()
   const identification = identificationGuestInput.value.trim()
   const address = addressGuestInput.value.trim()
 
-  if (!name || !apellido || !email || !phone || !identification || !address) {
+  if (!name || !email || !phone || !identification || !address) {
           alert('Todos los campos son obligatorios para el registro.');
           return;
   }
@@ -90,13 +88,11 @@ addGuestForm?.addEventListener('submit', async (event) => {
 
     await addGuest({ 
       name,
-      apellido,
       email,
       phone,
       identification,
       address,
       active: true
-       
     })
 
     setTimeout(() => {
@@ -138,7 +134,7 @@ const loadGuests = async () => {
     if (guestsSnapshot.empty) {
       guestsTableBody.innerHTML = `
         <tr>
-          <td colspan="6" class="text-center">
+          <td colspan="5" class="text-center">
             No hay huéspedes registrados
           </td>
         </tr>
@@ -161,7 +157,6 @@ const loadGuests = async () => {
         guestsTableBody.innerHTML += `
           <tr>
             <td>${guest.name}</td>
-            <td>${guest.apellido}</td>
             <td>${guest.email}</td>
             <td>${guest.phone}</td>
             <td>${guest.identification}</td>
