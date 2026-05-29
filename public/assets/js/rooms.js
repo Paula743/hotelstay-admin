@@ -263,7 +263,7 @@ editRoomForm?.addEventListener('submit', async (event) => {
   }
 })
 
-// Abre el modal y guarda el id
+// Abre el modal de delete y guarda el id
 window.deleteRoom = async function(button) {
     roomToDelete = button.getAttribute('data_id')
     deleteRoomModal.show()

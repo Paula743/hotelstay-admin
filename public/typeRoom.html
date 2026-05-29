@@ -40,23 +40,33 @@
 
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="admin-dashboard.html" class="nav-link text-white">Inicio</a>
+                    <a href="admin-dashboard.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                        <i class="bi bi-grid me-2"></i>
+                        Inicio</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="rooms.html" class="nav-link text-white">Habitaciones</a>
+                    <a href="rooms.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                        <i class="bi bi-house-door me-2"></i>
+                        Habitaciones</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="typeRoom.html" class="nav-link text-white">Tipo de Habitaciones</a>
+                    <a href="typeRoom.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-white fw-bold border-start border-3">
+                        <i class="bi bi-door-open me-2"></i>
+                        Tipo de Habitaciones</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="bookings.html" class="nav-link text-white">Reservaciones</a>
+                    <a href="bookings.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                        <i class="bi bi-calendar-event me-2"></i>
+                        Reservaciones</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="guests.html" class="nav-link text-white">Huespedes</a>
+                    <a href="guests.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                        <i class="bi bi-people me-2"></i>
+                        Huespedes</a>
                 </li>
             </ul>
       </div>
@@ -167,7 +177,113 @@
     </div>
   </div>
 
-    
+  <!-- Modal editar tipo de habitación -->
+  <div class="modal fade" id="editRoomTypeModal" tabindex="-1" aria-labelledby="editRoomTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg modal-profile">
+        <div class="modal-header border-0 pb-0">
+          <div>
+            <h5 class="modal-title fw-bold" id="editRoomTypeModalLabel">
+              <i class="bi bi-door-open me-2 text-primary"></i>
+              Editar tipo de habitación
+            </h5>
+            <p class="text-secondary small mb-0 mt-1">
+              Edita los cambios necesarios para el tipo de habitación.
+            </p>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body pt-3">
+          <div id="roomAlert" class="alert alert-danger d-none" role="alert"></div>
+          <div id="roomSuccess" class="alert alert-success d-none" role="alert"></div>
+
+          <input type="hidden" id="editTypeRoomId">
+
+          <form id="editRoomTypeForm" novalidate>
+            <div class="mb-3">
+              <label for="editNameCategory" class="form-label">Nombre</label>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="editNameCategory"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="editCapacity" class="form-label">Capacidad</label>
+              <input
+                type="number"
+                class="form-control form-control-lg"
+                id="editCapacity"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="editDescription" class="form-label">Descripción</label>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="editDescription"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="editBasePrice" class="form-label">Precio base</label>
+              <input
+                type="number"
+                class="form-control form-control-lg"
+                id="editBasePrice"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="editImage" class="form-label">URL de Imagen</label>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="editImage"
+                required
+              >
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" id="saveRoomTypeEditBtn" class="btn btn-primary btn-lg">
+                <i class="bi bi-check-circle me-2"></i>
+                Guardar cambios
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Modal para eliminar tipo de habitación-->
+  <div class="modal fade" id="deleteRoomTypeModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title">Eliminar Tipo de Habitación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body text-center">
+          <p>¿Estás seguro de que deseas eliminar este tipo de habitación? Esta acción no se puede deshacer.</p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <footer class="footer mt-auto py-3 bg-dark text-white-50 text-center">
         <div class="container">
