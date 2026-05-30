@@ -62,6 +62,7 @@
         
         <main class="main-content p-4 flex-grow-1">
             <div class="row g-4 mb-4">
+            <!--Cards de habitaciones-->
             <h5>Habitaciones</h5>
             <div class="col-md-3">
                 <div class="card shadow border-0">
@@ -123,13 +124,72 @@
 
             </div>
             
+            <!--Cards para tipo de habitaciones-->
             <h5>Tipos de Habitaciones</h5>
             <div class="row g-4 mb-4" id="roomTypesStats"></div>
 
-
+            <!--Cards para reservas-->
             <h5>Reservas</h5>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <div class="card shadow border-0">
+                    <div class="card-body text-center">
+                        <h5>Total de Reservaciones</h5>
+                        <h2 id="totalReservations">0</h2>
+                    </div>
+                    </div>
+                </div>
 
-            <h5>Huespedes</h5>
+                <div class="col-md-3">
+                    <div class="card shadow border-0">
+                    <div class="card-body text-center">
+                        <h5>Activas</h5>
+                        <h2 id="reservedReservations">0</h2>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card shadow border-0">
+                    <div class="card-body text-center">
+                        <h5>Canceladas</h5>
+                        <h2 id="cancelledReservations">0</h2>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Cards para reservas-->
+            <h5>Huéspedes</h5>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <div class="card shadow border-0">
+                    <div class="card-body text-center">
+                        <h5>Total de Huéspedes</h5>
+                        <h2 id="totalGuests">0</h2>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card shadow border-0">
+                    <div class="card-body text-center">
+                        <h5>Activos</h5>
+                        <h2 id="activeGuests">0</h2>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card shadow border-0">
+                    <div class="card-body text-center">
+                        <h5>Desactivados</h5>
+                        <h2 id="disabledGuest">0</h2>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
             <!--
             <div class="row g-4">
                 <div class="col-lg-3">
@@ -140,7 +200,7 @@
                         </div>
                     </div>
                 </div>
-
+ed
                 <div class="col-lg-3">
                     <div class="card info-card h-100">
                         <div class="card-body text-center p-4">
