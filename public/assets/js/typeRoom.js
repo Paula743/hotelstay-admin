@@ -8,7 +8,8 @@ const addTypeRoomForm = document.getElementById('addTypeRoomForm')
 const nameCategory = document.getElementById('nameCategory') 
 const capacityInput = document.getElementById('capacity') 
 const descriptionInput = document.getElementById('description') 
-const basePriceInput = document.getElementById('basePrice') 
+const basePriceInput = document.getElementById('basePrice')
+const imageCategoryInput = document.getElementById('image') 
 const openAddTypeRoomBtn = document.getElementById('openAddTypeRoomBtn')
 const saveTypeRoomBtn = document.getElementById('saveTypeRoomBtn') 
 
@@ -49,9 +50,15 @@ addTypeRoomForm?.addEventListener('submit', async (event) => {
   const capacityValue = capacityInput.value.trim()
   const description = descriptionInput.value.trim()
   const basePrice = basePriceInput.value.trim()
+  const image = imageCategoryInput ? imageCategoryInput.value.trim() : ""
 
+<<<<<<< HEAD
   if (!name || !capacityValue || !description || !basePrice) {
           alert('Todos los campos son obligatorios para el registro.');
+=======
+  if (!name || !capacityValue || !description || !basePrice || !image) {
+          showAlert('errorMessage', 'Todos los campos son obligatorios para el registro.');
+>>>>>>> feature/dashboard
           return;
   }
 
@@ -75,13 +82,20 @@ addTypeRoomForm?.addEventListener('submit', async (event) => {
       name, 
       capacity: parseInt(capacityValue, 10), 
       description, 
-      basePrice: parseFloat(basePrice) 
+      basePrice: parseFloat(basePrice),
+      image
     })
 
     setTimeout(() => {
       addTypeRoomModal?.hide()
+<<<<<<< HEAD
       addTypeRoomForm.reset() 
     }, 100)
+=======
+      addTypeRoomForm.reset()
+      loadRoomTypes();
+    }, 1500)
+>>>>>>> feature/dashboard
 
   } catch (error) {
     alert( 'No se pudo registrar el tipo de habitación')
@@ -108,6 +122,8 @@ async function loadRoomTypes() {
 
         querySnapshot.forEach((doc) => {
             const roomType = doc.data();
+            const imgUrl = roomType.image;
+
             roomTypesContainer.innerHTML += `
 
             <div class="col-md-4">

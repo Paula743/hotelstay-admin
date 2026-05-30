@@ -110,7 +110,7 @@ export async function updateCurrentProfile(uid, data) {
   });
 }
 
-export async function addTypeRoom({ name, capacity, description, basePrice }) {
+export async function addTypeRoom({ name, capacity, description, basePrice, image }) {
   try {
     const typeRoomsRef = collection(db, "typeRooms");
     const newDocRef = doc(typeRoomsRef);
@@ -120,6 +120,7 @@ export async function addTypeRoom({ name, capacity, description, basePrice }) {
       capacity: capacity,
       description: description || "",
       basePrice: basePrice,
+      image: image,
       createdAt: serverTimestamp()
     });
     return newDocRef.id; 

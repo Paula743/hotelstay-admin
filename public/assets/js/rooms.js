@@ -99,7 +99,7 @@ addRoomForm?.addEventListener('submit', async (event) => {
         floor,
         pricePerNight,
         status,
-        role: "client",
+        role: "customer",
         active: true,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -107,8 +107,14 @@ addRoomForm?.addEventListener('submit', async (event) => {
 
         setTimeout(() => {
         addRoomModal?.hide()
+<<<<<<< HEAD
         addRoomForm.reset() 
         }, 100)
+=======
+        addRoomForm.reset()
+        loadRooms();
+        }, 1500)
+>>>>>>> feature/dashboard
 
     } catch (error) {
         alert( 'No se pudo registrar la habitación')
