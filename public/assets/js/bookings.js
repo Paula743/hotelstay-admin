@@ -18,6 +18,9 @@ const guestNameInput = document.getElementById('guestName');
 const guestApellidoInput = document.getElementById('guestApellido');
 const guestPhoneInput = document.getElementById('guestPhone');
 
+const reservationsTableBody = document.getElementById('reservationsTableBody');
+const searchCard = document.getElementById('searchCard');
+
 const reservationForm = document.getElementById('reservationForm');
 let selectedRoomId = null;
 
@@ -105,7 +108,7 @@ searchRoomsForm?.addEventListener('submit', async (e) => {
       return;
     }
 
-    
+    searchCard.style.display = 'none';
 
     availableRoomTypes.forEach((roomType) => {
         const room = availableRooms.find(
@@ -300,6 +303,8 @@ reservationForm?.addEventListener('submit', async (e) => {
         reservationForm.reset();
         reservationModal.hide();
         availableRoomsContainer.innerHTML = '';
+        searchCard.style.display = 'block';
+        loadReservations();
 
     } catch (error) {
         console.error(
@@ -309,3 +314,98 @@ reservationForm?.addEventListener('submit', async (e) => {
         alert('Ocurrió un error al guardar');
     }
 });
+
+async function loadReservations() {
+    try {
+        reservationsTableBody.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center text-muted py-4">
+                    Cargando reservaciones...
+                </td>
+            </tr>
+        `;
+
+        const reservationsSnapshot = await getDocs(collection(db, 'reservations'));
+
+        if (reservationsSnapshot.empty) {
+            reservationsTableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                        No hay reservaciones registradas
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        reservationsTableBody.innerHTML = '';
+
+        for (const reservationDoc of reservationsSnapshot.docs) {
+            const reservation = reservationDoc.data();
+            let guestName = 'Sin huésped';
+
+            if (reservation.guestId) {
+                const guestRef = doc( db, 'guests', reservation.guestId);
+                const guestSnap = await getDoc(guestRef);
+
+                if (guestSnap.exists()) {
+                    const guest = guestSnap.data();
+                    guestName = `${guest.name}`;
+                }
+            }
+
+            let roomNumber = 'N/A';
+
+            if (reservation.roomId) {
+                const roomRef = doc( db, 'rooms', reservation.roomId);
+                const roomSnap = await getDoc(roomRef);
+
+                if (roomSnap.exists()) {
+                    roomNumber = roomSnap.data().roomNumber;
+                }
+            }
+
+            reservationsTableBody.innerHTML += `
+                <tr>
+                    <td>
+                        <span class="badge bg-primary">
+                            ${roomNumber}
+                        </span>
+                    </td>
+                    <td>
+                        ${guestName}
+                    </td>
+                    <td>
+                        ${reservation.checkInDate}
+                    </td>
+                    <td>
+                        ${reservation.checkOutDate}
+                    </td>
+                    <td>
+                        ${reservation.guests}
+                    </td>
+                    <td class="fw-bold text-success">
+                        $${reservation.total}
+                    </td>
+                    <td>
+                        <span class="badge bg-success">
+                            ${reservation.status}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        }
+    } catch (error) {
+        console.error( 'Error al cargar reservaciones:', error);
+
+        reservationsTableBody.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-danger text-center py-4">
+                    Error al cargar reservaciones
+                </td>
+            </tr>
+        `;
+    }
+}
+
+loadReservations();
