@@ -52,13 +52,8 @@ addTypeRoomForm?.addEventListener('submit', async (event) => {
   const basePrice = basePriceInput.value.trim()
   const image = imageCategoryInput ? imageCategoryInput.value.trim() : ""
 
-<<<<<<< HEAD
-  if (!name || !capacityValue || !description || !basePrice) {
-          alert('Todos los campos son obligatorios para el registro.');
-=======
   if (!name || !capacityValue || !description || !basePrice || !image) {
           showAlert('errorMessage', 'Todos los campos son obligatorios para el registro.');
->>>>>>> feature/dashboard
           return;
   }
 
@@ -88,14 +83,9 @@ addTypeRoomForm?.addEventListener('submit', async (event) => {
 
     setTimeout(() => {
       addTypeRoomModal?.hide()
-<<<<<<< HEAD
-      addTypeRoomForm.reset() 
-    }, 100)
-=======
       addTypeRoomForm.reset()
       loadRoomTypes();
     }, 1500)
->>>>>>> feature/dashboard
 
   } catch (error) {
     alert( 'No se pudo registrar el tipo de habitación')
