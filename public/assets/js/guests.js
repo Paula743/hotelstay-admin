@@ -1,9 +1,11 @@
-import { observeAuth, logoutUser, setButtonLoading, addGuest } from "./auth.js";
+import { hideAlert, showAlert,getFirebaseErrorMessage, observeAuth, logoutUser, setButtonLoading, addGuest } from "./auth.js";
 import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 import { db } from "./firebase.js";
 
+//Constante para cerrar sesión
 const logoutBtn = document.getElementById('logoutBtn');
 
+//Constantes para registrar huesped
 const addGuestForm = document.getElementById('addGuestForm')
 const nameGuestInput = document.getElementById('nameGuest')
 const apellidoGuestInput = document.getElementById('apellidoGuest')  
@@ -11,7 +13,6 @@ const emailGuestInput = document.getElementById('emailGuest')
 const phoneGuestInput = document.getElementById('phoneGuest') 
 const identificationGuestInput = document.getElementById('identificationGuest') 
 const addressGuestInput = document.getElementById('addressGuest')
-
 
 const openAddGuestBtn = document.getElementById('openAddGuestBtn')
 const saveGuestBtn = document.getElementById('saveGuestBtn') 
@@ -22,8 +23,28 @@ const addGuestModal = addGuestModalElement ? bootstrap.Modal.getOrCreateInstance
 const guestsTableBody = document.getElementById('guestsTableBody');
 const searchGuestInput = document.getElementById('searchGuest');
 
+//Constantes para editar habitación
+const editGuestForm = document.getElementById('editGuestForm')
+const editNameGuestInput = document.getElementById('editNameGuest')
+const editApellidoGuestInput = document.getElementById('editApellidoGuest')  
+const edirEmailGuestInput = document.getElementById('editEmailGuest') 
+const editPhoneGuestInput = document.getElementById('editPhoneGuest') 
+const editIdentificationGuestInput = document.getElementById('editIdentificationGuest') 
+const editAddressGuestInput = document.getElementById('editAddressGuest')
+const saveGuestEditBtn = document.getElementById('saveGuestEditBtn') 
+
+const addGuestModalElement = document.getElementById('addGuestModal')
+const addGuestModal = addGuestModalElement ? bootstrap.Modal.getOrCreateInstance(addGuestModalElement) : null
+
+// Variable y constante para eliminar habitación
+let roomToDelete = null
+const deleteGuestBtn = document.getElementById('confirmDeleteBtn')
+const deleteGuestModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteGuestModal'))
+
+
 let allGuests = [];
 
+//Verificar rol
 observeAuth(async (user) => {
     if (!user) {
         window.location.href = 'login.html';
@@ -47,10 +68,12 @@ observeAuth(async (user) => {
     }
 });
 
+// Cerrar sesión
 logoutBtn?.addEventListener('click', async () => {
     try { await logoutUser(); } catch (error) { console.error("Error al cerrar sesión:", error); }
 });
 
+// Modal para registrar huesped
 addGuestForm?.addEventListener('submit', async (event) => {
   event.preventDefault()
 
@@ -116,7 +139,7 @@ addGuestForm?.addEventListener('submit', async (event) => {
   }
 });
 
-
+// Buscar huespedes
 searchGuestInput?.addEventListener('input', (e) => {
 
   const text = e.target.value.toLowerCase();
@@ -161,6 +184,7 @@ const loadGuests = async () => {
       guests.forEach((guest) => {
 
         guestsTableBody.innerHTML += `
+        <div class= "d-flex align-items-center">
           <tr>
             <td>${guest.name}</td>
             <td>${guest.apellido}</td>
@@ -168,7 +192,23 @@ const loadGuests = async () => {
             <td>${guest.phone}</td>
             <td>${guest.identification}</td>
             <td>${guest.address}</td>
+            <td>
+              <div class= "d-flex">
+                <button type="button" 
+                    class="btn btn-outline-secondary  d-flex align-items-center justify-content-center p-3 text-dark m-2" 
+                    style="border-color: #cbd5e1; border-radius: 5px; width: 30px; height: 30px;">
+                    <i class="bi bi-pencil fs-5"></i>
+                </button>
+                
+                <button type="button" 
+                      class="btn btn-outline-secondary d-flex align-items-center justify-content-center p-3 text-danger m-2" 
+                      style="border-color: #cbd5e1; border-radius: 5px; width: 30px; height: 30px;">
+                  <i class="bi bi-trash3 fs-5"></i>
+                </button>
+              </div>
+            </td>
           </tr>
+        </div>
         `;
       });
     };
@@ -194,4 +234,6 @@ const loadGuests = async () => {
 window.addEventListener('DOMContentLoaded', () => {
   loadGuests();
 });
+
+
 
