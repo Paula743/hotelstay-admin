@@ -202,8 +202,6 @@ export async function addGuest({ name, apellido, email, phone, identification, a
 }
 
 
-
-
 export function getFirebaseErrorMessage(error) {
   const code = error?.code || "";
 

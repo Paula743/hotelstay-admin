@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HotelStay | Dashboard</title>
+
+    <title>HotelStay | Reservaciones</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
@@ -13,11 +15,13 @@
 
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
-<body class="d-flex flex-column min-vh-100">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="admin-dashboard.html">
+<body class="bg-light d-flex flex-column min-vh-100">
+
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow text-center">
+        <div class="container justify-content-center">
+            <a class="navbar-brand fw-bold" href="reservation.html">
+
                 🏨 HotelStay
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -35,30 +39,42 @@
 
     <div class="d-flex flex-grow-1">
         <div class="sidebar bg-dark text-white p-3">
-            <h4 class="h5 fw-bold mb-3">Administración</h4>
-            
+        <h4>Administración</h4>
+
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="admin-dashboard.html" class="nav-link text-white active">Inicio</a>
+                    <a href="admin-dashboard.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                        <i class="bi bi-grid me-2"></i>
+                        Inicio</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="rooms.html" class="nav-link text-white">Habitaciones</a>
+                    <a href="rooms.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                        <i class="bi bi-house-door me-2"></i>
+                        Habitaciones</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="typeRoom.html" class="nav-link text-white">Tipo de Habitaciones</a>
+                    <a href="typeRoom.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                        <i class="bi bi-door-open me-2"></i>
+                        Tipo de Habitaciones</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="bookings.html" class="nav-link text-white">Reservas</a>
+                    <a href="bookings.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-white fw-bold border-start border-3">
+                        <i class="bi bi-calendar-event me-2"></i>
+                        Reservaciones</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="guests.html" class="nav-link text-white">Huespedes</a>
+                    <a href="guests.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                        <i class="bi bi-people me-2"></i>
+                        Huespedes</a>
                 </li>
             </ul>
         </div>
+
+        
         
         <main class="main-content p-4 flex-grow-1">
             <div class="d-flex justify-content-between align-items-center py-4 px-3 bg-light">
@@ -379,5 +395,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="assets/js/bookings.js"></script>
+
 </body>
 </html>

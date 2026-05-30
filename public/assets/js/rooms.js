@@ -263,7 +263,7 @@ editRoomForm?.addEventListener('submit', async (event) => {
   }
 })
 
-// Abre el modal y guarda el id
+// Abre el modal de delete y guarda el id
 window.deleteRoom = async function(button) {
     roomToDelete = button.getAttribute('data_id')
     deleteRoomModal.show()
@@ -289,6 +289,7 @@ deleteRoomBtn?.addEventListener('click', async () => {
 // Tarjetas con información de las habitaciones
 async function loadRooms() {
     try {
+        const plantilla = document.getElementById("molde-container")
         const roomsContainer = document.getElementById("roomsContainer");
         roomsContainer.innerHTML = "";
         const querySnapshot = await getDocs(collection(db, "rooms"));
@@ -298,12 +299,10 @@ async function loadRooms() {
         querySnapshot.forEach((doc) => {
             const room = doc.data();
             const roomId = doc.id;
-
             const tipo = listaDeTipos.find(t => t.id === room.typeId);
             const tipoNombre = tipo ? tipo.name : 'Sin tipo';
-
             roomsContainer.innerHTML += `
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-body">
 
@@ -346,7 +345,6 @@ async function loadRooms() {
                             <i class="bi bi-pencil fs-6"></i>
                             <span>Edit</span>
                         </button>
-
                         <button type="button" 
                                 class="btn btn-outline-secondary d-flex align-items-center justify-content-center p-3 text-danger m-2" 
                                 style="border-color: #cbd5e1; border-radius: 8px; width: 42px; height: 42px;"
@@ -355,7 +353,6 @@ async function loadRooms() {
                             <i class="bi bi-trash3 fs-5"></i>
                         </button>
                     </div>
-
                 </div>
             </div>
             `;

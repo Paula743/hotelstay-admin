@@ -39,23 +39,33 @@
 
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="admin-dashboard.html" class="nav-link text-white">Inicio</a>
+                    <a href="admin-dashboard.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                        <i class="bi bi-grid me-2"></i>
+                        Inicio</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="rooms.html" class="nav-link text-white">Habitaciones</a>
+                    <a href="rooms.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                        <i class="bi bi-house-door me-2"></i>
+                        Habitaciones</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="typeRoom.html" class="nav-link text-white">Tipo de Habitaciones</a>
+                    <a href="typeRoom.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                        <i class="bi bi-door-open me-2"></i>
+                        Tipo de Habitaciones</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="bookings.html" class="nav-link text-white">Reservas</a>
+                    <a href="bookings.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                        <i class="bi bi-calendar-event me-2"></i>
+                        Reservaciones</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="guests.html" class="nav-link text-white">Huespedes</a>
+                    <a href="guests.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-white fw-bold border-start border-3">
+                        <i class="bi bi-people me-2"></i>
+                        Huespedes</a>
                 </li>
             </ul>
         </div>
@@ -79,6 +89,7 @@
                 </button>
             </div>
           </div>
+
           
           <div class="mb-3">
             <input
@@ -96,6 +107,7 @@
                 <th>Teléfono</th>
                 <th>Identificación</th>
                 <th>Dirección</th>
+                <th>Acciones</th>
               </tr>
             </thead>
 
@@ -105,7 +117,7 @@
         </main>
     </div>
 
-    <!-- Modal editar perfil -->
+    <!-- Modal para agregar huesped -->
   <div class="modal fade" id="addGuestModal" tabindex="-1" aria-labelledby="addGuestModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow-lg modal-profile">
@@ -125,12 +137,12 @@
         <div class="modal-body pt-3">
           <form id="addGuestForm" novalidate>
             <div class="mb-3">
-              <label for="name" class="form-label">Nombre Completo</label>
+              <label for="nameGuest" class="form-label">Nombre Completo</label>
               <input type="text" class="form-control form-control-lg" id="nameGuest" required>
             </div>
 
             <div class="mb-3">
-              <label for="email" class="form-label">Correo Electrónico</label>
+              <label for="emailGuest" class="form-label">Correo Electrónico</label>
               <input
                 type="email"
                 class="form-control form-control-lg"
@@ -140,7 +152,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="phone" class="form-label">Número de Teléfono</label>
+              <label for="phoneGuest" class="form-label">Número de Teléfono</label>
               <input
                 type="text"
                 class="form-control form-control-lg"
@@ -150,7 +162,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="identification" class="form-label">Identificación</label>
+              <label for="identificationGuest" class="form-label">Identificación</label>
               <input
                 type="text"
                 class="form-control form-control-lg"
@@ -160,7 +172,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="adress" class="form-label">Dirección</label>
+              <label for="addressGuest" class="form-label">Dirección</label>
               <input
                 type="text"
                 class="form-control form-control-lg"
@@ -176,6 +188,113 @@
               </button>
             </div>
           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal editar huesped -->
+  <div class="modal fade" id="editGuestModal" tabindex="-1" aria-labelledby="editGuestModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg modal-profile">
+        <div class="modal-header border-0 pb-0">
+          <div>
+            <h5 class="modal-title fw-bold" id="editGuestModalLabel">
+              <i class="bi bi-people me-2 text-primary"></i>
+              Editar huésped
+            </h5>
+            <p class="text-secondary small mb-0 mt-1">
+              Edita los cambios necesarios para el huésped.
+            </p>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body pt-3">
+          <div id="guestAlert" class="alert alert-danger d-none" role="alert"></div>
+          <div id="guestSuccess" class="alert alert-success d-none" role="alert"></div>
+
+          <input type="hidden" id="editGuestId">
+
+          <form id="editGuestForm" novalidate>
+             <div class="mb-3">
+              <label for="editNameGuest" class="form-label">Nombre Completo</label>
+              <input 
+                type="text" 
+                class="form-control form-control-lg" 
+                id="editNameGuest" 
+                required>
+            </div>
+
+            <div class="mb-3">
+              <label for="editEmailGuest" class="form-label">Correo Electrónico</label>
+              <input
+                type="email"
+                class="form-control form-control-lg"
+                id="editEmailGuest"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="editPhoneGuest" class="form-label">Número de Teléfono</label>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="editPhoneGuest"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="editIdentificationGuest" class="form-label">Identificación</label>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="editIdentificationGuest"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="editAddressGuest" class="form-label">Dirección</label>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="editAddressGuest"
+                required
+              >
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" id="saveGuestEditBtn" class="btn btn-primary btn-lg">
+                <i class="bi bi-check-circle me-2"></i>
+                Guardar cambios
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Modal para eliminar huesped-->
+  <div class="modal fade" id="deleteGuestModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title">Eliminar Huésped</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body text-center">
+          <p>¿Estás seguro de que deseas eliminar ha este huésped? Esta acción no se puede deshacer.</p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
         </div>
       </div>
     </div>
