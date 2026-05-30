@@ -137,12 +137,12 @@
         <div class="modal-body pt-3">
           <form id="addGuestForm" novalidate>
             <div class="mb-3">
-              <label for="name" class="form-label">Nombre Completo</label>
+              <label for="nameGuest" class="form-label">Nombre Completo</label>
               <input type="text" class="form-control form-control-lg" id="nameGuest" required>
             </div>
 
             <div class="mb-3">
-              <label for="email" class="form-label">Correo Electrónico</label>
+              <label for="emailGuest" class="form-label">Correo Electrónico</label>
               <input
                 type="email"
                 class="form-control form-control-lg"
@@ -152,7 +152,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="phone" class="form-label">Número de Teléfono</label>
+              <label for="phoneGuest" class="form-label">Número de Teléfono</label>
               <input
                 type="text"
                 class="form-control form-control-lg"
@@ -162,7 +162,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="identification" class="form-label">Identificación</label>
+              <label for="identificationGuest" class="form-label">Identificación</label>
               <input
                 type="text"
                 class="form-control form-control-lg"
@@ -172,7 +172,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="adress" class="form-label">Dirección</label>
+              <label for="addressGuest" class="form-label">Dirección</label>
               <input
                 type="text"
                 class="form-control form-control-lg"
@@ -217,28 +217,17 @@
           <input type="hidden" id="editGuestId">
 
           <form id="editGuestForm" novalidate>
-            <div class="mb-3">
-              <label for="name" class="form-label">Nombre(s)</label>
-              <input
-                type="text"
-                class="form-control form-control-lg"
-                id="editNameGuest"
-                required
-              >
+             <div class="mb-3">
+              <label for="editNameGuest" class="form-label">Nombre Completo</label>
+              <input 
+                type="text" 
+                class="form-control form-control-lg" 
+                id="editNameGuest" 
+                required>
             </div>
 
             <div class="mb-3">
-              <label for="apellido" class="form-label">Apellido(s)</label>
-              <input
-                type="text"
-                class="form-control form-control-lg"
-                id="editApellidoGuest"
-                required
-              >
-            </div>
-
-            <div class="mb-3">
-              <label for="email" class="form-label">Correo Electrónico</label>
+              <label for="editEmailGuest" class="form-label">Correo Electrónico</label>
               <input
                 type="email"
                 class="form-control form-control-lg"
@@ -248,7 +237,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="phone" class="form-label">Número de Teléfono</label>
+              <label for="editPhoneGuest" class="form-label">Número de Teléfono</label>
               <input
                 type="text"
                 class="form-control form-control-lg"
@@ -258,7 +247,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="identification" class="form-label">Identificación</label>
+              <label for="editIdentificationGuest" class="form-label">Identificación</label>
               <input
                 type="text"
                 class="form-control form-control-lg"
@@ -268,7 +257,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="adress" class="form-label">Dirección</label>
+              <label for="editAddressGuest" class="form-label">Dirección</label>
               <input
                 type="text"
                 class="form-control form-control-lg"
