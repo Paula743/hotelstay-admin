@@ -62,6 +62,21 @@ export async function registerUser({ fullName, email, phone, address, password, 
     updatedAt: serverTimestamp()
   });
 
+  const guestRef = collection(db, "guests");
+  const docGuestRef = doc(guestRef);
+  
+  await setDoc(doc(db, "guests", user.uid), {
+    guestId: user.uid,
+    name: fullName,
+    email: email,
+    phone: phone,
+    identification: null,
+    address: address,          
+    active: active,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  });
+
   return user;
 }
 
