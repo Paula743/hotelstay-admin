@@ -36,6 +36,12 @@ let roomToDelete = null
 const deleteRoomBtn = document.getElementById('confirmDeleteBtn')
 const deleteRoomModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteRoomModal'))
 
+
+//Variables para el filtro
+let allRooms = []
+let allTypes = []
+let activeFilter = 'all'
+
 //Verificar rol
 observeAuth(async (user) => {
     if (!user) {
@@ -289,81 +295,102 @@ deleteRoomBtn?.addEventListener('click', async () => {
 // Tarjetas con información de las habitaciones
 async function loadRooms() {
     try {
-        const plantilla = document.getElementById("molde-container")
         const roomsContainer = document.getElementById("roomsContainer");
         roomsContainer.innerHTML = "";
         const querySnapshot = await getDocs(collection(db, "rooms"));
 
-        const listaDeTipos = await getRoomTypes();
+        allTypes = await getRoomTypes();
+        allRooms = [];
 
         querySnapshot.forEach((doc) => {
-            const room = doc.data();
-            const roomId = doc.id;
-            const tipo = listaDeTipos.find(t => t.id === room.typeId);
-            const tipoNombre = tipo ? tipo.name : 'Sin tipo';
-            roomsContainer.innerHTML += `
-            <div class="col-md-3">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-body">
-
-                        <h5 class="card-title">
-                            Habitación ${room.roomNumber}
-                        </h5>
-
-                        <p class="card-text">
-                            <strong>Tipo:</strong> ${tipoNombre}  
-                        </p>
-
-                        <p class="card-text">
-                            <strong>Piso:</strong>
-                            ${room.floor}
-                        </p>
-
-                        <p class="card-text">
-                            <strong>Estado:</strong>
-                            ${room.status}
-                        </p>
-
-                        <p class="card-text">
-                            <strong>Precio:</strong>
-                            $${room.pricePerNight}
-                        </p>
-
-                    </div>
-                    <div class="d-flex gap-2 w-100 align-items-center">
-                        <button type="button" 
-                                class="btn btn-outline-secondary flex-grow-1 d-flex align-items-center justify-content-center gap-2 py-2 text-dark m-2" 
-                                style="border-color: #cbd5e1; border-radius: 8px;"
-                                data-bs-toggle="modal" 
-                                data-bs-target="#editRoomModal"
-                                data-id="${roomId}"
-                                data-number="${room.roomNumber}"
-                                data-type="${room.typeId}"
-                                data-floor="${room.floor}"
-                                data-price="${room.pricePerNight}"
-                                data-status="${room.status}">
-                            <i class="bi bi-pencil fs-6"></i>
-                            <span>Edit</span>
-                        </button>
-                        <button type="button" 
-                                class="btn btn-outline-secondary d-flex align-items-center justify-content-center p-3 text-danger m-2" 
-                                style="border-color: #cbd5e1; border-radius: 8px; width: 42px; height: 42px;"
-                                data_id="${roomId}"
-                                onclick="deleteRoom(this)">
-                            <i class="bi bi-trash3 fs-5"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            `;
+            allRooms.push({ id: doc.id, ...doc.data() });
         });
 
+        renderFilterButtons();
+        renderRooms();
+
     } catch(error) {
-        console.error(
-            "Error al cargar habitaciones:",
-            error
-        );
+        console.error("Error al cargar habitaciones:", error);
     }
+}
+
+// Filtro
+function renderFilterButtons() {
+    const container = document.getElementById("roomFilterButtons");
+    if (!container) return;
+
+    const tipos = [{ id: 'all', name: 'Todos' }, ...allTypes];
+
+    container.innerHTML = tipos.map(tipo => `
+        <button 
+            type="button"
+            class="btn btn-sm ${activeFilter === tipo.id ? 'btn-dark' : 'btn-outline-secondary'} me-2 mb-2"
+            style="border-radius: 20px; padding: 4px 16px;"
+            onclick="setRoomFilter('${tipo.id}')">
+            ${tipo.name}
+        </button>
+    `).join('');
+}
+
+function renderRooms() {
+    const roomsContainer = document.getElementById("roomsContainer");
+    roomsContainer.innerHTML = "";
+
+    const filtered = activeFilter === 'all'
+        ? allRooms
+        : allRooms.filter(room => room.typeId === activeFilter);
+
+    if (filtered.length === 0) {
+        roomsContainer.innerHTML = `<p class="text-muted">No hay habitaciones para este tipo.</p>`;
+        return;
+    }
+
+    filtered.forEach((room) => {
+        const tipo = allTypes.find(t => t.id === room.typeId);
+        const tipoNombre = tipo ? tipo.name : 'Sin tipo';
+        roomsContainer.innerHTML += `
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Habitación ${room.roomNumber}</h5>
+                    <p class="card-text"><strong>Tipo:</strong> ${tipoNombre}</p>
+                    <p class="card-text"><strong>Piso:</strong> ${room.floor}</p>
+                    <p class="card-text"><strong>Estado:</strong> ${room.status}</p>
+                    <p class="card-text"><strong>Precio:</strong> $${room.pricePerNight}</p>
+                </div>
+                <div class="d-flex gap-2 w-100 align-items-center">
+                    <button type="button" 
+                            class="btn btn-outline-secondary flex-grow-1 d-flex align-items-center justify-content-center gap-2 py-2 text-dark m-2" 
+                            style="border-color: #cbd5e1; border-radius: 8px;"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#editRoomModal"
+                            data-id="${room.id}"
+                            data-number="${room.roomNumber}"
+                            data-type="${room.typeId}"
+                            data-floor="${room.floor}"
+                            data-price="${room.pricePerNight}"
+                            data-status="${room.status}">
+                        <i class="bi bi-pencil fs-6"></i>
+                        <span>Edit</span>
+                    </button>
+                    <button type="button" 
+                            class="btn btn-outline-secondary d-flex align-items-center justify-content-center p-3 text-danger m-2" 
+                            style="border-color: #cbd5e1; border-radius: 8px; width: 42px; height: 42px;"
+                            data_id="${room.id}"
+                            onclick="deleteRoom(this)">
+                        <i class="bi bi-trash3 fs-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        `;
+    });
+}
+
+window.setRoomFilter = function(typeId) {
+    activeFilter = typeId;
+    renderFilterButtons();
+    renderRooms();
 }
 
 document.addEventListener('DOMContentLoaded', upRoomType);
