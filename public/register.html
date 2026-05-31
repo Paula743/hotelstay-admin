@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotelStay - Registro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com">
+    <link href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                🏨 HotelStay
+            </a>
+        </div>
+    </nav>
+
+    <main class="flex-shrink-0 my-auto py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    
+                    <div class="card shadow-lg border-0 rounded-4 p-4">
+                        <div class="card-body">
+                            <div class="text-center mb-4">
+                                <h2 class="fw-bold text-dark">Crear Cuenta</h2>
+                                <p class="text-muted small">Regístrate para visualizar las ofertas que tenemos para ti.</p>
+                            </div>
+
+                            <div id="errorMessage" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+                                <span id="errorText">Ocurrió un error.</span>
+                                <button type="button" class="btn-close" id="btnHideAlert" aria-label="Close"></button>
+                            </div>
+
+                            <form id="registerForm" class="needs-validation" novalidate>
+                                
+                                <div class="mb-3">
+                                    <label for="fullName" class="form-label fw-medium">Nombre Completo</label>
+                                    <input type="text" class="form-control" id="fullName" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="email" class="form-label fw-medium">Correo Electrónico</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label fw-medium">Número de Teléfono</label>
+                                    <input type="text" class="form-control" id="phone" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="address" class="form-label fw-medium">Dirección</label>
+                                    <input type="text" class="form-control" id="address" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="password" class="form-label fw-medium">Contraseña</label>
+                                    <input type="password" class="form-control" id="password" required minlength="6">
+                                </div>
+
+                                <div class="d-grid mb-3">
+                                    <button id="registerBtn" type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold shadow-sm">
+                                        Registrarse
+                                    </button>
+                                </div>
+
+                                <div class="text-center mt-3">
+                                    <span class="text-muted small">¿Ya tienes una cuenta?</span>
+                                    <a href="login.html" class="text-primary small fw-bold text-decoration-none ms-1">Inicia sesión</a>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-dark text-white-50 text-center">
+        <div class="container">
+            <small>&copy; 2026 HotelStay</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script type="module" src="assets/js/validators.js"></script>
+    <script type="module" src="assets/js/register.js"></script>
+</body>
+</html>

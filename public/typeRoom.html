@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotelStay | Tipo de Habitación</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <link href="https://fonts.googleapis.com">
+    <link href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+  <div class="d-flex flex-grow-1">
+        <!--Para lo de la izquierda-->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-name"> 🏨 HotelStay</div>
+                <div class="brand-sub">Consola de Administración</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a href="admin-dashboard.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                            <i class="bi bi-grid me-2"></i>
+                            Inicio</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="rooms.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                            <i class="bi bi-house-door me-2"></i>
+                            Habitaciones</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="typeRoom.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-white fw-bold border-start border-3">
+                            <i class="bi bi-door-open me-2"></i>
+                            Tipo de Habitaciones</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="bookings.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                            <i class="bi bi-calendar-event me-2"></i>
+                            Reservaciones</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="guests.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                            <i class="bi bi-people me-2"></i>
+                            Huespedes</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!--Para lo de la derecha-->
+        <div class="d-flex flex-column flex-grow-1">
+          <div class="topbar">
+              <span class="topbar-title">Administración</span>
+              <div class="d-flex gap-2">
+                  <button id="logoutBtn" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm">
+                      Cerrar Sesión
+                  </button>
+              </div>
+          </div>
+
+          <main class="main-content p-4 flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center py-4 px-3 bg-light">
+                  <div>
+                    <h1 class="fw-bold fs-2 mb-1">Tipos de Habitación</h1>
+                    <p class="text-muted mb-0">Administra y gestiona las categorías de habitaciones disponibles.</p>
+
+                  </div>
+                  <div>
+                      <button
+                          type="button"
+                          class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 fw-semibold"
+                          data-bs-toggle="modal"
+                          data-bs-target="#addTypeRoomModal"
+                          id="openAddTypeRoomBtn"
+                      >
+                          <i class="bi bi-plus-circle fs-5"></i>
+                          Agregar nuevo tipo de habitación
+                      </button>
+                  </div>
+            </div>    
+            <div id="roomTypesContainer" class="row g-4 mb-4 p-3"></div>
+          </main>
+          
+
+          <!-- Modal agregar tipo de habitación -->
+        <div class="modal fade" id="addTypeRoomModal" tabindex="-1" aria-labelledby="addTypeRoomModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg modal-profile">
+              <div class="modal-header border-0 pb-0">
+                <div>
+                  <h5 class="modal-title fw-bold" id="addTypeRoomModalLabel">
+                    <i class="bi bi-door-open me-3 text-primary"></i>
+                    Agregar nuevo tipo de habitación.
+                  </h5>
+                  <p class="text-secondary small mb-0 mt-1">
+                    Añade el nuevo tipo de habitación deseado.
+                  </p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+
+              <div class="modal-body pt-3">
+                <form id="addTypeRoomForm" novalidate>
+                  <div class="mb-3">
+                    <label for="nameCategory" class="form-label">Nombre</label>
+                    <input
+                      type="text"
+                      class="form-control form-control-lg"
+                      id="nameCategory"
+                      required
+                    >
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="capacity" class="form-label">Capacidad</label>
+                    <input
+                      type="number"
+                      class="form-control form-control-lg"
+                      id="capacity"
+                      required
+                    >
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="description" class="form-label">Descripción</label>
+                    <input
+                      type="text"
+                      class="form-control form-control-lg"
+                      id="description"
+                      required
+                    >
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="basePrice" class="form-label">Precio base</label>
+                    <input
+                      type="number"
+                      class="form-control form-control-lg"
+                      id="basePrice"
+                      required
+                    >
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="basePrice" class="form-label">URL de Imagen</label>
+                    <input
+                      type="text"
+                      class="form-control form-control-lg"
+                      id="image"
+                      required
+                    >
+                  </div>
+
+                  <div class="d-grid">
+                    <button type="submit" id="saveTypeRoomBtn" class="btn btn-primary btn-lg">
+                      <i class="bi bi-check-circle me-2"></i>
+                      Registrar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal editar tipo de habitación -->
+        <div class="modal fade" id="editRoomTypeModal" tabindex="-1" aria-labelledby="editRoomTypeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg modal-profile">
+              <div class="modal-header border-0 pb-0">
+                <div>
+                  <h5 class="modal-title fw-bold" id="editRoomTypeModalLabel">
+                    <i class="bi bi-door-open me-2 text-primary"></i>
+                    Editar tipo de habitación
+                  </h5>
+                  <p class="text-secondary small mb-0 mt-1">
+                    Edita los cambios necesarios para el tipo de habitación.
+                  </p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+
+              <div class="modal-body pt-3">
+                <div id="roomAlert" class="alert alert-danger d-none" role="alert"></div>
+                <div id="roomSuccess" class="alert alert-success d-none" role="alert"></div>
+
+                <input type="hidden" id="editTypeRoomId">
+
+                <form id="editRoomTypeForm" novalidate>
+                  <div class="mb-3">
+                    <label for="editNameCategory" class="form-label">Nombre</label>
+                    <input
+                      type="text"
+                      class="form-control form-control-lg"
+                      id="editNameCategory"
+                      required
+                    >
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="editCapacity" class="form-label">Capacidad</label>
+                    <input
+                      type="number"
+                      class="form-control form-control-lg"
+                      id="editCapacity"
+                      required
+                    >
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="editDescription" class="form-label">Descripción</label>
+                    <input
+                      type="text"
+                      class="form-control form-control-lg"
+                      id="editDescription"
+                      required
+                    >
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="editBasePrice" class="form-label">Precio base</label>
+                    <input
+                      type="number"
+                      class="form-control form-control-lg"
+                      id="editBasePrice"
+                      required
+                    >
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="editImage" class="form-label">URL de Imagen</label>
+                    <input
+                      type="text"
+                      class="form-control form-control-lg"
+                      id="editImage"
+                      required
+                    >
+                  </div>
+
+                  <div class="d-grid">
+                    <button type="submit" id="saveRoomTypeEditBtn" class="btn btn-primary btn-lg">
+                      <i class="bi bi-check-circle me-2"></i>
+                      Guardar cambios
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Modal para eliminar tipo de habitación-->
+        <div class="modal fade" id="deleteRoomTypeModal" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <h5 class="modal-title">Eliminar Tipo de Habitación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+
+              <div class="modal-body text-center">
+                <p>¿Estás seguro de que deseas eliminar este tipo de habitación? Esta acción no se puede deshacer.</p>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="footer">
+            <small>&copy; 2026 HotelStay</small>
+        </footer>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="assets/js/typeRoom.js"></script>
+</body>
+</html>
