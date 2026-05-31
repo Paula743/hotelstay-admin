@@ -118,7 +118,36 @@
                                 <h4 class="fw-bold mb-1">Reservaciones registradas</h4>
                                 <p class="text-muted mb-0">Lista de reservaciones actuales</p>
                             </div>
+
+                            <div class="d-flex gap-2 align-items-center">
+
+                                <select id="filterGuest" class="form-select" style="width: 180px;">
+                                    <option value="">Todos los huéspedes</option>
+                                </select>
+
+                                <select id="filterRoom" class="form-select" style="width: 180px;">
+                                    <option value="">Todas las habitaciones</option>
+                                </select>
+
+                                <select id="filterStatus" class="form-select" style="width: 160px;">
+                                    <option value="">Todos los estados</option>
+                                    <option value="reserved">Reservada</option>
+                                    <option value="cancelled">Cancelada</option>
+                                    <option value="completed">Finalizada</option>
+                                </select>
+
+                                <select id="sortReservations" class="form-select" style="width: 150px;">
+                                    <option value="dateAsc">Fecha ↑</option>
+                                    <option value="dateDesc">Fecha ↓</option>
+                                    <option value="guest">Huésped</option>
+                                    <option value="room">Habitación</option>
+                                </select>
+
+                            </div>
+
                         </div>
+
+                        
 
                         <div class="table-responsive">
                             <table class="table align-middle">

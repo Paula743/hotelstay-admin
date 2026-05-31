@@ -25,6 +25,13 @@ let selectedRoomId = null;
 let editingReservationId = null;
 let isEditingReservation = false;
 
+
+const filterGuest = document.getElementById('filterGuest');
+const filterRoom = document.getElementById('filterRoom');
+const filterStatus = document.getElementById('filterStatus');
+const sortReservations = document.getElementById('sortReservations');
+let allReservations = [];
+
 logoutBtn?.addEventListener('click', async () => {
     try { await logoutUser(); } 
     catch (error) { console.error("Error al cerrar sesión:", error); }
@@ -389,7 +396,7 @@ reservationForm?.addEventListener('submit', async (e) => {
             });
         }
 
-        alert('Reservación creada correctamente');
+        
         reservationForm.reset();
         reservationModal.hide();
         availableRoomsContainer.innerHTML = '';
@@ -405,8 +412,121 @@ reservationForm?.addEventListener('submit', async (e) => {
     }
 });
 
+function renderReservations(reservations) {
+    reservationsTableBody.innerHTML = '';
+    reservations.forEach(reservation => {
+
+        reservationsTableBody.innerHTML += `
+            <tr>
+                <td>
+                    <span class="badge bg-primary">
+                        ${reservation.roomNumber}
+                    </span>
+                </td>
+
+                <td>${reservation.guestName}</td>
+
+                <td>${reservation.checkInDate}</td>
+
+                <td>${reservation.checkOutDate}</td>
+
+                <td>${reservation.guests}</td>
+
+                <td class="fw-bold text-success">
+                    $${reservation.total}
+                </td>
+
+                <td>
+                    <span class="badge bg-success">
+                        ${reservation.status}
+                    </span>
+                </td>
+
+                <td>
+                    <button
+                        class="btn btn-warning btn-sm editReservationBtn"
+                        data-id="${reservation.id}">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+
+                    <button
+                        class="btn btn-danger btn-sm deleteReservationBtn"
+                        data-id="${reservation.id}">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+function loadFilters() {
+    const guests = [...new Set(allReservations.map(r => r.guestName))];
+    const rooms = [...new Set(allReservations.map(r => r.roomNumber))];
+
+    filterGuest.innerHTML = '<option value="">Todos los huéspedes</option>';
+
+    guests.forEach(guest => {
+        filterGuest.innerHTML += `
+            <option value="${guest}">
+                ${guest}
+            </option>
+        `;
+    });
+
+    filterRoom.innerHTML = '<option value="">Todas las habitaciones</option>';
+
+    rooms.forEach(room => {
+        filterRoom.innerHTML += `
+            <option value="${room}">
+                ${room}
+            </option>
+        `;
+    });
+}
+
+function applyFilters() {
+    let filtered = [...allReservations];
+
+    if (filterGuest.value) {
+        filtered = filtered.filter(r => r.guestName === filterGuest.value);
+    }
+    if (filterRoom.value) {
+        filtered = filtered.filter(r => r.roomNumber === filterRoom.value);
+    }
+    if (filterStatus.value) {
+        filtered = filtered.filter(r => r.status === filterStatus.value);
+    }
+    switch (sortReservations.value) {
+
+        case 'dateAsc':
+            filtered.sort((a, b) => a.checkInDate.localeCompare(b.checkInDate));
+            break;
+
+        case 'dateDesc':
+            filtered.sort((a, b) => b.checkInDate.localeCompare(a.checkInDate));
+            break;
+
+        case 'guest':
+            filtered.sort((a, b) => a.guestName.localeCompare(b.guestName));
+            break;
+
+        case 'room':
+            filtered.sort((a, b) => String(a.roomNumber).localeCompare(String(b.roomNumber)));
+            break;
+    }
+
+    renderReservations(filtered);
+}
+
+
+
 async function loadReservations() {
     try {
+        allReservations = [];
+        filterGuest.value = '';
+        filterRoom.value = '';
+        filterStatus.value = '';
         reservationsTableBody.innerHTML = `
             <tr>
                 <td colspan="7" class="text-center text-muted py-4">
@@ -455,49 +575,18 @@ async function loadReservations() {
                 }
             }
 
-            reservationsTableBody.innerHTML += `
-                <tr>
-                    <td>
-                        <span class="badge bg-primary">
-                            ${roomNumber}
-                        </span>
-                    </td>
-                    <td>
-                        ${guestName}
-                    </td>
-                    <td>
-                        ${reservation.checkInDate}
-                    </td>
-                    <td>
-                        ${reservation.checkOutDate}
-                    </td>
-                    <td>
-                        ${reservation.guests}
-                    </td>
-                    <td class="fw-bold text-success">
-                        $${reservation.total}
-                    </td>
-                    <td>
-                        <span class="badge bg-success">
-                            ${reservation.status}
-                        </span>
-                    </td>
-                    <td>
-                      <button
-                          class="btn btn-warning btn-sm editReservationBtn"
-                          data-id="${reservationDoc.id}">
-                          <i class="bi bi-pencil"></i>
-                      </button>
+            allReservations.push({
+                id: reservationDoc.id,
+                guestName,
+                roomNumber,
+                ...reservation
+            });
 
-                      <button
-                          class="btn btn-danger btn-sm deleteReservationBtn"
-                          data-id="${reservationDoc.id}">
-                          <i class="bi bi-trash"></i>
-                      </button>
-                    </td>
-                </tr>
-            `;
         }
+
+        loadFilters();
+        applyFilters();
+        renderReservations(allReservations);
     } catch (error) {
         console.error( 'Error al cargar reservaciones:', error);
 
@@ -511,6 +600,8 @@ async function loadReservations() {
     }
 }
 
+
+
 document.addEventListener('click', async (e) => {
     const deleteBtn = e.target.closest('.deleteReservationBtn');
 
@@ -523,7 +614,6 @@ document.addEventListener('click', async (e) => {
 
     try {
         await deleteDoc(doc(db, 'reservations', reservationId));
-        alert('Reservación eliminada');
         loadReservations();
 
     } catch (error) {
@@ -581,5 +671,8 @@ document.addEventListener('click', async (e) => {
     reservationModal.show();
 });
 
-
+filterGuest?.addEventListener('change', applyFilters);
+filterRoom?.addEventListener('change', applyFilters);
+filterStatus?.addEventListener('change', applyFilters);
+sortReservations?.addEventListener('change', applyFilters);
 loadReservations();
