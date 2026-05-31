@@ -2,7 +2,7 @@ import { observeAuth, logoutUser, setButtonLoading, addGuest } from "./auth.js";
 import { doc, getDoc, collection, getDocs, query, where, addDoc, deleteDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 import { db } from "./firebase.js";
 
-
+const logoutBtn = document.getElementById('logoutBtn');
 
 const reservationModalElement = document.getElementById('reservationModal');
 const reservationModal = reservationModalElement ? bootstrap.Modal.getOrCreateInstance(reservationModalElement) : null;
@@ -25,6 +25,10 @@ let selectedRoomId = null;
 let editingReservationId = null;
 let isEditingReservation = false;
 
+logoutBtn?.addEventListener('click', async () => {
+    try { await logoutUser(); } 
+    catch (error) { console.error("Error al cerrar sesión:", error); }
+});
 
 searchRoomsForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
