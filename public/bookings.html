@@ -149,6 +149,7 @@
                                     <th>Huéspedes</th>
                                     <th>Total</th>
                                     <th>Estado</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
 
@@ -245,65 +246,40 @@
 
                 <div class="modal-body">
                     <div class="row g-4">
-
                         <div class="col-md-6">
-                            <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-body">
+                            <h5 class="fw-bold mb-4">Información de la habitación</h5>
 
-                                <div class="card-body">
-                                    <h5 class="fw-bold mb-4"> Información de la habitación</h5>
+                            <div class="row">
 
-                                    <div class="mb-3">
-                                        <label class="form-label fw-semibold"> Número de habitación</label>
-
-                                        <input type="text" id="reservationRoomNumber" class="form-control" readonly>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label fw-semibold"> Tipo de habitación </label>
-                                        <input type="text" id="reservationRoomType" class="form-control" readonly>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label fw-semibold"> Piso</label>
-
-                                        <input type="text" id="reservationFloor" class="form-control" readonly>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label fw-semibold"> Precio por noche </label>
-
-                                        <input type="text" id="reservationPrice" class="form-control" readonly>
-                                    </div>
+                                <!-- Columna izquierda -->
+                                <div class="col-md-6">
 
                                     <div class="mb-3">
                                         <label class="form-label fw-semibold">
                                             Fecha de entrada
                                         </label>
-
-                                        <input type="text" id="reservationCheckIn" class="form-control" readonly>
+                                        <input type="date" id="reservationCheckIn" class="form-control" readonly>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label fw-semibold">
                                             Fecha de salida
                                         </label>
-
-                                        <input type="text" id="reservationCheckOut" class="form-control" readonly>
+                                        <input type="date" id="reservationCheckOut" class="form-control" readonly>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label fw-semibold">
-                                            Número de huéspedes
+                                            Precio por noche
                                         </label>
-
-                                        <input type="text" id="reservationGuests" class="form-control" readonly>
+                                        <input type="text" id="reservationPrice" class="form-control" readonly>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label fw-semibold">
                                             Noches de estadía
                                         </label>
-
                                         <input type="text" id="reservationNights" class="form-control" readonly>
                                     </div>
 
@@ -311,14 +287,49 @@
                                         <label class="form-label fw-semibold">
                                             Total a pagar
                                         </label>
-
-                                        <input type="text" id="reservationTotal" class="form-control fw-bold text-success" readonly>
+                                        <input type="text" id="reservationTotal"
+                                            class="form-control fw-bold text-success"
+                                            readonly>
                                     </div>
 
                                 </div>
+
+                                <!-- Columna derecha -->
+                                <div class="col-md-6">
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            Número de habitación
+                                        </label>
+                                        <input type="text" id="reservationRoomNumber" class="form-control" readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            Tipo de habitación
+                                        </label>
+                                        <input type="text" id="reservationRoomType" class="form-control" readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            Piso
+                                        </label>
+                                        <input type="text" id="reservationFloor" class="form-control" readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            Número de huéspedes
+                                        </label>
+                                        <input type="number" id="reservationGuests" class="form-control" readonly>
+                                    </div>
+
+                                </div>
+
                             </div>
                         </div>
-
+                        </div>
                         <!-- Datos huésped -->
                         <div class="col-md-6">
                             <div class="card border-0 shadow-sm rounded-4 h-100">
@@ -342,12 +353,6 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <label class="form-label fw-semibold"> Apellido</label>
-
-                                            <input type="text" id="guestApellido" class="form-control" readonly>
-                                        </div>
-
-                                        <div class="mb-3">
                                             <label class="form-label fw-semibold"> Teléfono</label>
 
                                             <input type="text" id="guestPhone" class="form-control" readonly>
@@ -358,13 +363,14 @@
                                         </button>
                                         
                                     </form>
-                                    <a href="guests.html" class="btn btn-primary rounded-3 px-4 py-2 fw-semibold shadow d-inline-flex align-items-center gap-2 mt-4">
+                                    <a href="guests.html" class="btn btn-primary rounded-3 px-4 py-2 fw-semibold shadow d-inline-flex align-items-center gap-2 mt-4" id="registerGuestBtn">
                                         <i class="bi bi-person-plus-fill"></i>
                                         Registrar Huésped
                                     </a>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

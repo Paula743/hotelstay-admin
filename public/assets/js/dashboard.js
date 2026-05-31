@@ -1,19 +1,6 @@
-import { 
-    observeAuth, 
-    logoutUser, 
-    hideAlert, 
-    showAlert, 
-    updateCurrentProfile, 
-    setButtonLoading,
-    getCurrentUserProfile 
+import { observeAuth, logoutUser, hideAlert, showAlert, updateCurrentProfile, setButtonLoading, getCurrentUserProfile 
 } from "./auth.js";
-import { 
-    collection, 
-    getDocs, 
-    doc, 
-    query, 
-    where, 
-    runTransaction 
+import { collection, getDocs, doc, query, where, runTransaction 
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 import { db } from "./firebase.js"; 
 
@@ -198,6 +185,7 @@ async function isRoomOccupied(roomId, checkInBuscado, checkOutBuscado) {
 
 async function loadAvailableRooms(requiredGuests) {
     try {
+        /*
         const typeRoomsSnapshot = await getDocs(collection(db, "typeRooms"));
         const typeRoomsList = {};
         
@@ -244,8 +232,72 @@ async function loadAvailableRooms(requiredGuests) {
                     });
                 }
             }
-        }
-        renderRoomCards(filteredResults);
+        }*/
+
+        const guestCount = Number(guestsInput.value);
+        const checkIn = checkInInput.value;
+        const checkOut = checkOutInput.value;
+    
+        const bookingsSnapshot = await getDocs(collection(db, 'reservations'));
+        const roomsSnapshot = await getDocs(collection(db, 'rooms'));
+        const roomTypesSnapshot = await getDocs(collection(db, 'typeRooms'));
+    
+        
+        const occupiedRooms = [];
+    
+        bookingsSnapshot.forEach((bookingDoc) => {
+    
+            const booking = bookingDoc.data();
+    
+            const bookingStart = booking.checkInDate;
+            const bookingEnd = booking.checkOutDate;
+    
+            // Verifica cruce de fechas
+            const isOverlapping = checkIn <= bookingEnd && checkOut >= bookingStart;
+    
+            if (isOverlapping) {
+            occupiedRooms.push(booking.roomId);
+            }
+        });
+    
+        // Habitaciones disponibles
+        const availableRooms = [];
+    
+        roomsSnapshot.forEach((roomDoc) => {
+            //const room = roomDoc.data();
+            const room = {
+                id: roomDoc.id,
+                ...roomDoc.data()
+            };
+    
+            if (!occupiedRooms.includes(room.id) && room.status != 'maintenance') {
+                availableRooms.push(room);
+            }
+        });
+    
+        // Tipos disponibles
+        const availableRoomTypes = [];
+    
+        roomTypesSnapshot.forEach((typeDoc) => {
+    
+            const roomType = typeDoc.data();
+    
+            const hasAvailableRoom = availableRooms.some(
+            room => room.typeId === typeDoc.id
+            );
+    
+            if (hasAvailableRoom && roomType.capacity >= guestCount) {
+            availableRoomTypes.push({
+                id: typeDoc.id,
+                ...roomType,
+                finalPrice: roomType.basePrice,
+                availableStock: availableRoomTypes.length
+            });
+            }
+        });
+    
+
+        renderRoomCards(availableRoomTypes);
 
     } catch (error) {
         console.error("Error crítico al procesar la búsqueda en Firestore:", error);
@@ -511,7 +563,8 @@ checkoutReservationsBtn?.addEventListener('click', async () => {
         await runTransaction(db, async (transaction) => {
             const docReservaRef = doc(collection(db, "reservations"));
             const nuevaReservaData = {
-                guestId: currentUserSession?.uid || "invitado",          
+                guestId: currentUserSession?.uid || "invitado", 
+                guests: reservationToProcess.guests,         
                 roomId: roomPhysicalId,                                  
                 checkInDate: reservationToProcess.checkIn,               
                 checkOutDate: reservationToProcess.checkOut,             

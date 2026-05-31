@@ -107,14 +107,9 @@ addRoomForm?.addEventListener('submit', async (event) => {
 
         setTimeout(() => {
         addRoomModal?.hide()
-<<<<<<< HEAD
         addRoomForm.reset() 
-        }, 100)
-=======
-        addRoomForm.reset()
         loadRooms();
-        }, 1500)
->>>>>>> feature/dashboard
+        }, 100)
 
     } catch (error) {
         alert( 'No se pudo registrar la habitación')
