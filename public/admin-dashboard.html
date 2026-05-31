@@ -14,239 +14,190 @@
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
+    <div class="d-flex flex-grow-1">
+        <!--Para lo de la izquierda-->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-name"> 🏨 HotelStay</div>
+                <div class="brand-sub">Consola de Administración</div>
+            </div>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="admin-dashboard.html">
-                🏨 HotelStay
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <nav class="sidebar-nav">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a href="admin-dashboard.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-white fw-bold border-start border-3">
+                            <i class="bi bi-grid me-2"></i>
+                            Inicio</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="rooms.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                            <i class="bi bi-house-door me-2"></i>
+                            Habitaciones</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="typeRoom.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                            <i class="bi bi-door-open me-2"></i>
+                            Tipo de Habitaciones</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="bookings.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                            <i class="bi bi-calendar-event me-2"></i>
+                            Reservaciones</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="guests.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
+                            <i class="bi bi-people me-2"></i>
+                            Huespedes</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!--Para lo de la derecha-->
+        <div class="d-flex flex-column flex-grow-1">
+            <div class="topbar">
+                <span class="topbar-title">Administración</span>
                 <div class="d-flex gap-2">
                     <button id="logoutBtn" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm">
                         Cerrar Sesión
                     </button>
                 </div>
             </div>
+
+            <main class="main-content flex-grow-1">
+                <!--Habitaciones-->
+                <div class="section-title">
+                    <i class="bi bi-door-open"></i> Habitaciones
+                </div>
+                <div class="row g-3 mb-2">
+
+                    <div class="col-md-3 col-6">
+                        <div class="stat-card">
+                            <div class="stat-label">Total Habitaciones</div>
+                            <div class="stat-value" id="totalRooms">0</div>
+                            <span class="stat-badge badge-gray">General</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-6">
+                        <div class="stat-card">
+                            <div class="stat-label">Disponibles</div>
+                            <div class="stat-value" id="availableRooms">0</div>
+                            <span class="stat-badge badge-green">Activas</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="stat-card">
+                            <div class="stat-label">Reservadas</div>
+                            <div class="stat-value" id="reservedRooms">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="stat-card">
+                            <div class="stat-label">Ocupadas</div>
+                            <div class="stat-value" id="occupiedRooms">0</div>
+                        </div>
+                    </div>
+                </div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <div class="stat-label">Mantenimiento</div>
+                        <div class="stat-value text-red" id="maintenanceRooms">0</div>
+                        <span class="stat-badge badge-orange">En Proceso</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <div class="stat-label">Inactivas</div>
+                        <div class="stat-value" id="inactiveRooms">0</div>
+                    </div>
+                </div>
+            </div>
+
+                <!--Tipo de habitaciones-->
+                <div class="section-title">
+                    <i class="bi bi-door-open"></i> Tipo de Habitaciones
+                </div>
+                <div class="row g-3 mb-2" id="roomTypesStats"></div>
+
+                <!--Reservas-->
+                <div class="section-title">
+                    <i class="bi bi-calendar-event"></i> Reservas
+                </div>
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-3 col-6">
+                        <div class="stat-card">
+                            <div class="stat-label">Total de Reservas</div>
+                            <div class="stat-value" id="totalReservations">0</div>
+                            <span class="stat-badge badge-gray">General</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-6">
+                        <div class="stat-card">
+                                <div class="stat-label">Activas</div>
+                                <div class="stat-value" id="reservedReservations">0</div>
+                                <span class="stat-badge badge-green">Activas</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 col-6">
+                        <div class="stat-card">
+                            <div class="stat-label">Calceladas</div>
+                            <div class="stat-value text-red" id="cancelledReservations">0</div>
+                            <span class="stat-badge badge-orange">Cancelada</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Huespedes-->
+                <div class="section-title">
+                    <i class="bi bi-people"></i> Huéspedes
+                </div>
+                <div class="row g-3 mb-2">
+                    <div class="col-md-3 col-6">
+                        <div class="stat-card">
+                            <div class="stat-label">Total de Huéspedes</div>
+                            <div class="stat-value" id="totalGuests">0</div>
+                            <span class="stat-badge badge-gray">General</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-6">
+                        <div class="stat-card">
+                                <div class="stat-label">Activos</div>
+                                <div class="stat-value" id="activeGuests">0</div>
+                                <span class="stat-badge badge-green">Activas</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 col-6">
+                        <div class="stat-card">
+                            <div class="stat-label">Desactivados</div>
+                            <div class="stat-value text-red" id="disabledGuest">0</div>
+                            <span class="stat-badge badge-orange">Cancelada</span>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </main>
+
+            <footer class="footer">
+                <small>&copy; 2026 HotelStay</small>
+            </footer>
+
         </div>
-    </nav>
 
-    <div class="d-flex flex-grow-1">
-        <div class="sidebar bg-dark text-white p-3">
-            <h4 class="h5 fw-bold mb-3">Administración</h4>
-            
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a href="admin-dashboard.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-white fw-bold border-start border-3">
-                        <i class="bi bi-grid me-2"></i>
-                        Inicio</a>
-                </li>
 
-                <li class="nav-item">
-                    <a href="rooms.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
-                        <i class="bi bi-house-door me-2"></i>
-                        Habitaciones</a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="typeRoom.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
-                        <i class="bi bi-door-open me-2"></i>
-                        Tipo de Habitaciones</a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="bookings.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
-                        <i class="bi bi-calendar-event me-2"></i>
-                        Reservaciones</a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="guests.html" class="nav-link text-white active d-flex align-items-center gap-2 px-3 py-2 rounded text-secondary fw-medium">
-                        <i class="bi bi-people me-2"></i>
-                        Huespedes</a>
-                </li>
-            </ul>
-        </div>
-        
-        <main class="main-content p-4 flex-grow-1">
-            <div class="row g-4 mb-4">
-            <!--Cards de habitaciones-->
-            <h5>Habitaciones</h5>
-            <div class="col-md-3">
-                <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h5>Total Habitaciones</h5>
-                    <h2 id="totalRooms">0</h2>
-                </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h5>Disponibles</h5>
-                    <h2 id="availableRooms">0</h2>
-                </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h5>Reservadas</h5>
-                    <h2 id="reservedRooms">0</h2>
-                </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h5>Ocupadas</h5>
-                    <h2 id="occupiedRooms">0</h2>
-                </div>
-                </div>
-            </div>
-
-            </div>
-
-            <div class="row g-4 mb-4">
-
-            <div class="col-md-3">
-                <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h5>Mantenimiento</h5>
-                    <h2 id="maintenanceRooms">0</h2>
-                </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h5>Inactivas</h5>
-                    <h2 id="inactiveRooms">0</h2>
-                </div>
-                </div>
-            </div>
-
-            </div>
-            
-            <!--Cards para tipo de habitaciones-->
-            <h5>Tipos de Habitaciones</h5>
-            <div class="row g-4 mb-4" id="roomTypesStats"></div>
-
-            <!--Cards para reservas-->
-            <h5>Reservas</h5>
-            <div class="row g-3 mb-3">
-                <div class="col-md-3">
-                    <div class="card shadow border-0">
-                    <div class="card-body text-center">
-                        <h5>Total de Reservaciones</h5>
-                        <h2 id="totalReservations">0</h2>
-                    </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="card shadow border-0">
-                    <div class="card-body text-center">
-                        <h5>Activas</h5>
-                        <h2 id="reservedReservations">0</h2>
-                    </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="card shadow border-0">
-                    <div class="card-body text-center">
-                        <h5>Canceladas</h5>
-                        <h2 id="cancelledReservations">0</h2>
-                    </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--Cards para reservas-->
-            <h5>Huéspedes</h5>
-            <div class="row g-3 mb-3">
-                <div class="col-md-3">
-                    <div class="card shadow border-0">
-                    <div class="card-body text-center">
-                        <h5>Total de Huéspedes</h5>
-                        <h2 id="totalGuests">0</h2>
-                    </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="card shadow border-0">
-                    <div class="card-body text-center">
-                        <h5>Activos</h5>
-                        <h2 id="activeGuests">0</h2>
-                    </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="card shadow border-0">
-                    <div class="card-body text-center">
-                        <h5>Desactivados</h5>
-                        <h2 id="disabledGuest">0</h2>
-                    </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--
-            <div class="row g-4">
-                <div class="col-lg-3">
-                    <div class="card info-card h-100">
-                        <div class="card-body text-center p-4">
-                            <i class="bi bi-door-open fs-2 mb-2 d-block"></i>
-                            <h5 class="card-title h6 mb-0">Habitaciones</h5>
-                        </div>
-                    </div>
-                </div>
-ed
-                <div class="col-lg-3">
-                    <div class="card info-card h-100">
-                        <div class="card-body text-center p-4">
-                            <i class="bi bi-grid fs-2 mb-2 d-block"></i>
-                            <h5 class="card-title h6 mb-0">Tipo de habitaciones</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="card info-card h-100">
-                        <div class="card-body text-center p-4">
-                            <i class="bi bi-calendar-check fs-2 mb-2 d-block"></i>
-                            <h5 class="card-title h6 mb-0">Reservas</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="card info-card h-100">
-                        <div class="card-body text-center p-4">
-                            <i class="bi bi-people fs-2 mb-2 d-block"></i>
-                            <h5 class="card-title h6 mb-0">Huespedes</h5>
-                        </div>
-                    </div>
-                </div>
-                
-            </div> -->   
-        </main>
     </div>
-
-    <footer class="footer mt-auto py-3 bg-dark text-white-50 text-center">
-        <div class="container">
-            <small>&copy; 2026 HotelStay</small>
-        </div>
-    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="assets/js/admin-dashboard.js"></script>

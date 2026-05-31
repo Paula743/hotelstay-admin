@@ -110,12 +110,10 @@ async function loadRoomTypeStats() {
 
             roomTypesContainer.innerHTML += `
 
-            <div class="col-md-3">
-                <div class="card shadow border-0">
-                    <div class="card-body text-center">
-                        <h5>${type.name}</h5>
-                        <h2>${totalRooms}</h2>
-                    </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-label">${type.name}</div>
+                    <div class="stat-value">${totalRooms}</div>
                 </div>
             </div>
             `;
