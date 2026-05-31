@@ -110,12 +110,10 @@ async function loadRoomTypeStats() {
 
             roomTypesContainer.innerHTML += `
 
-            <div class="col-md-3">
-                <div class="card shadow border-0">
-                    <div class="card-body text-center">
-                        <h5>${type.name}</h5>
-                        <h2>${totalRooms}</h2>
-                    </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-label">${type.name}</div>
+                    <div class="stat-value">${totalRooms}</div>
                 </div>
             </div>
             `;
@@ -129,5 +127,87 @@ async function loadRoomTypeStats() {
     }
 }
 
+async function loadBookingStats() {
+
+    try {
+        const querySnapshot = await getDocs(collection(db, "reservations"));
+
+        let total = 0;
+        let reserved = 0;
+        let cancelled = 0;
+
+        querySnapshot.forEach((doc) => {
+            const reservation = doc.data();
+            total++;
+
+            switch(reservation.status) {
+                case "reserved":
+                    reserved++;
+                    break;
+
+                case "cancelled":
+                    cancelled++;
+                    break;
+            }
+        });
+
+        document.getElementById("totalReservations").textContent = total;
+        document.getElementById("reservedReservations").textContent = reserved;
+        document.getElementById("cancelledReservations").textContent = cancelled;
+      
+
+    } catch(error) {
+
+        console.error(
+            "Error al cargar estadísticas:",
+            error
+        );
+
+    }
+
+}
+
+async function loadGuestStats() {
+
+    try {
+        const querySnapshot = await getDocs(collection(db, "guests"));
+
+        let total = 0;
+        let activeGuest = 0;
+        let disabledGuest = 0;
+
+        querySnapshot.forEach((doc) => {
+            const guest = doc.data();
+            total++;
+
+            switch(guest.active) {
+                case true:
+                    activeGuest++;
+                    break;
+
+                case false:
+                    disabledGuest++;
+                    break;
+            }
+        });
+
+        document.getElementById("totalGuests").textContent = total;
+        document.getElementById("activeGuests").textContent = activeGuest;
+        document.getElementById("disabledGuest").textContent = disabledGuest;
+      
+
+    } catch(error) {
+
+        console.error(
+            "Error al cargar estadísticas:",
+            error
+        );
+
+    }
+
+}
+
 loadRoomStats();
 loadRoomTypeStats();
+loadBookingStats();
+loadGuestStats();
