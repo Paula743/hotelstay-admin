@@ -13,7 +13,6 @@ const phoneGuestInput = document.getElementById('phoneGuest')
 const identificationGuestInput = document.getElementById('identificationGuest') 
 const addressGuestInput = document.getElementById('addressGuest')
 
-const openAddGuestBtn = document.getElementById('openAddGuestBtn')
 const saveGuestBtn = document.getElementById('saveGuestBtn') 
 
 const addGuestModalElement = document.getElementById('addGuestModal')
@@ -69,6 +68,56 @@ observeAuth(async (user) => {
 logoutBtn?.addEventListener('click', async () => {
     try { await logoutUser(); } catch (error) { console.error("Error al cerrar sesión:", error); }
 });
+
+const renderGuests = (guests) => {
+  guestsTableBody.innerHTML = '';
+ 
+  if (!guests.length) {
+    guestsTableBody.innerHTML = `
+      <tr>
+        <td colspan="6" class="text-center">No hay huéspedes registrados</td>
+      </tr>
+    `;
+    return;
+  }
+ 
+  guests.forEach((guest) => {
+    guestsTableBody.innerHTML += `
+      <tr>
+        <td>${guest.name}</td>
+        <td>${guest.email}</td>
+        <td>${guest.phone}</td>
+        <td>${guest.identification}</td>
+        <td>${guest.address}</td>
+        <td>
+          <div class="d-flex">
+            <button type="button"
+                class="btn btn-outline-secondary d-flex align-items-center justify-content-center p-3 text-dark m-2"
+                style="border-color: #cbd5e1; border-radius: 5px; width: 30px; height: 30px;"
+                data-bs-toggle="modal"
+                data-bs-target="#editGuestModal"
+                data-id="${guest.guestId}"
+                data-name="${guest.name}"
+                data-email="${guest.email}"
+                data-phone="${guest.phone}"
+                data-identification="${guest.identification}"
+                data-address="${guest.address}">
+              <i class="bi bi-pencil fs-5"></i>
+            </button>
+ 
+            <button type="button"
+                class="btn btn-outline-secondary d-flex align-items-center justify-content-center p-3 text-danger m-2"
+                style="border-color: #cbd5e1; border-radius: 5px; width: 30px; height: 30px;"
+                data-id="${guest.guestId}"
+                onclick="deleteGuest(this)">
+              <i class="bi bi-trash3 fs-5"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+};
 
 // Modal para registrar huesped
 addGuestForm?.addEventListener('submit', async (event) => {
@@ -136,9 +185,7 @@ addGuestForm?.addEventListener('submit', async (event) => {
 
 // Buscar huespedes
 searchGuestInput?.addEventListener('input', (e) => {
-
   const text = e.target.value.toLowerCase();
-
   const filteredGuests = allGuests.filter((guest) =>
     guest.name.toLowerCase().includes(text)
   );
@@ -149,7 +196,6 @@ searchGuestInput?.addEventListener('input', (e) => {
 // Cargar información anterior al formulario
 editGuestModalElement?.addEventListener('show.bs.modal', (event) => {
   const button = event.relatedTarget
-  const roomTypeId = button.getAttribute('data-id')
 
   document.getElementById('editGuestId').value = button.getAttribute('data-id')
   editNameGuestInput.value     = button.getAttribute('data-name')
@@ -175,9 +221,6 @@ editGuestForm?.addEventListener('submit', async (event) => {
   const identification = editIdentificationGuestInput.value.trim()
   const address = editAddressGuestInput.value.trim()
 
-  console.log(guestId)
-  console.log(guestId.value)
-
   if (!guestId) {
     showAlert('guestAlert', 'No se encontró el ID del huésped');
     return;
@@ -190,6 +233,15 @@ editGuestForm?.addEventListener('submit', async (event) => {
 
   if(phone.length != 10){
     showAlert('guestAlert','Cantidad de digitos erronea en el telefono');
+    return;
+  }
+
+  const qEdit = query(collection(db, 'guests'), where('phone', '==', phone));
+  const phoneExistenteEdit = await getDocs(qEdit);
+  const phoneRepetido = phoneExistenteEdit.docs.some((docSnap) => docSnap.id !== guestId);
+
+  if (phoneRepetido) {
+    showAlert('guestAlert', 'Este número telefónico ya está registrado en otro huésped');
     return;
   }
 
@@ -234,7 +286,7 @@ editGuestForm?.addEventListener('submit', async (event) => {
 
 // Abre el modal de delete y guarda el id
 window.deleteGuest = async function(button) {
-    guestToDelete = button.getAttribute('data_id')
+    guestToDelete = button.getAttribute('data-id')
     deleteGuestModal.show()
     console.log(guestToDelete)
 }
@@ -251,7 +303,7 @@ deleteGuestBtn?.addEventListener('click', async () => {
     } catch (error) {
         console.error('Error al eliminar al huésped:', error)
     } finally {
-        roomTypeToDelete = null
+        guestToDelete = null
     }
 })
 
@@ -265,7 +317,7 @@ const loadGuests = async () => {
     if (guestsSnapshot.empty) {
       guestsTableBody.innerHTML = `
         <tr>
-          <td colspan="5" class="text-center">
+          <td colspan="6" class="text-center">
             No hay huéspedes registrados
           </td>
         </tr>
@@ -273,75 +325,17 @@ const loadGuests = async () => {
       return;
     }
 
-    allGuests = [];
-
-    guestsSnapshot.forEach((doc) => {
-      allGuests.push(doc.data());
-      
-    });
-
-    const renderGuests = (guests) => {
-
-
-      guestsTableBody.innerHTML = '';
-
-      guests.forEach((guest) => {
-
-        guestsTableBody.innerHTML += `
-        <div class= "d-flex align-items-center">
-          <tr>
-            <td>${guest.name}</td>
-            <td>${guest.email}</td>
-            <td>${guest.phone}</td>
-            <td>${guest.identification}</td>
-            <td>${guest.address}</td>
-            <td>
-              <div class= "d-flex">
-                <button type="button" 
-                    class="btn btn-outline-secondary  d-flex align-items-center justify-content-center p-3 text-dark m-2" 
-                    style="border-color: #cbd5e1; border-radius: 5px; width: 30px; height: 30px;"
-                    data-bs-toggle="modal" 
-                    data-bs-target="#editGuestModal"
-                    data-id="${guests.guestId}"
-                    data-name="${guest.name}"
-                    data-email="${guest.email}"
-                    data-phone="${guest.phone}"
-                    data-identification="${guest.identification}"
-                    data-address="${guest.address}"
-                    >
-                    <i class="bi bi-pencil fs-5"></i>
-                </button>
-                
-                <button type="button" 
-                      class="btn btn-outline-secondary d-flex align-items-center justify-content-center p-3 text-danger m-2" 
-                      style="border-color: #cbd5e1; border-radius: 5px; width: 30px; height: 30px;"
-                      data_id="${guest.guestId}"
-                      onclick="deleteGuest(this)">
-                  <i class="bi bi-trash3 fs-5"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-        </div>
-        `;
-      });
-    };
-
+    allGuests = guestsSnapshot.docs.map((doc) => ({
+      guestId: doc.id,
+      ...doc.data()
+    }));
+ 
     renderGuests(allGuests);
 
-    searchGuestInput?.addEventListener('input', (e) => {
 
-      const text = e.target.value.toLowerCase();
-
-      const filteredGuests = allGuests.filter((guest) =>
-        guest.name.toLowerCase().includes(text)
-      );
-
-      renderGuests(filteredGuests);
-    });
 
   } catch (error) {
-    console.error('Error al cargar huéspedes:', error);
+      console.error('Error al cargar huéspedes:', error);
   }
 };
 
