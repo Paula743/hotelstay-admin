@@ -183,7 +183,6 @@ export async function addGuest({ name, apellido, email, phone, identification, a
     await setDoc(docGuestRef, {
       guestId: docGuestRef.id,
       name: name,
-      apellido: apellido,
       email: email,
       phone: phone,
       identification: identification,
