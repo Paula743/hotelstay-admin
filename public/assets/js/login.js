@@ -5,8 +5,10 @@ const emailInput = document.getElementById('loginEmail');
 const passwordInput = document.getElementById('loginPassword');
 const loginBtn = document.getElementById('loginBtn');
 
+let isLoggingIn = false;
+
 observeAuth((user) => {
-    if (user) {
+     if (user && !isLoggingIn) { 
         window.location.href = 'dashboard.html';
     }
 });
@@ -23,6 +25,8 @@ form?.addEventListener('submit', async (e) => {
         showAlert('errorMessage', 'Por favor, completa todos los campos.');
         return;        
     }
+
+    isLoggingIn = true;
 
     try {
         setButtonLoading(loginBtn, true, 'Ingresar', 'Iniciando Sesión...'); 
@@ -41,6 +45,7 @@ form?.addEventListener('submit', async (e) => {
     
     } catch (error) {
         showAlert('errorMessage', getFirebaseErrorMessage(error));
+        isLoggingIn = false;
     
     } finally {
         setButtonLoading(loginBtn, false, 'Ingresar'); 
