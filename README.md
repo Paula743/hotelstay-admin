@@ -22,7 +22,7 @@ El sistema implementa tres módulos completos de tipo CRUD y las siguientes func
 
 ## 🚀 Clona el repositorio
 
-    git clone https://github.com/tzedds16/stayhotel-admin.git
+    git clone https://github.com/Paula743/hotelstay-admin.git
 
 ## 🌆 Link de Netlify
 
