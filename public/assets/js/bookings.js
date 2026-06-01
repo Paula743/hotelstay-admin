@@ -412,6 +412,54 @@ reservationForm?.addEventListener('submit', async (e) => {
     }
 });
 
+function getStayButton(reservation) {
+    const hoy = new Date().toLocaleDateString('sv-SE');
+    if (
+        reservation.status === 'reserved' &&
+        reservation.checkInDate !== hoy) {
+        return `
+            <button
+                class="btn btn-secondary btn-sm"
+                disabled>
+                Check-In
+            </button>
+        `;
+    }
+
+    if (reservation.status === 'reserved' && reservation.checkInDate === hoy) {
+        return `
+            <button
+                class="btn btn-success btn-sm checkInBtn"
+                data-id="${reservation.id}">
+                Check-In
+            </button>
+        `;
+    }
+
+    if (reservation.status === 'checked-in') {
+        const disabled = reservation.checkOutDate !== hoy ? 'disabled' : '';
+
+        return `
+            <button
+                class="btn btn-danger btn-sm checkOutBtn"
+                data-id="${reservation.id}"
+                ${disabled}>
+                Check-Out
+            </button>
+        `;
+    }
+
+    if (reservation.status === 'checked-out') {
+        return `
+            <span class="badge bg-dark">
+                Finalizada
+            </span>
+        `;
+    }
+
+    return '';
+}
+
 function renderReservations(reservations) {
     reservationsTableBody.innerHTML = '';
     reservations.forEach(reservation => {
@@ -438,10 +486,14 @@ function renderReservations(reservations) {
 
                 <td>
                     <span class="badge bg-success">
-                        ${reservation.status}
+                        ${reservation.status === 'reserved' ? 'Reservada'
+                            : reservation.status === 'checked-in' ? 'Hospedado'
+                            : reservation.status === 'checked-out' ? 'Finalizada'
+                            : reservation.status}
                     </span>
                 </td>
 
+                <td>${getStayButton(reservation)}</td>
                 <td>
                     <button
                         class="btn btn-warning btn-sm editReservationBtn"
@@ -459,6 +511,44 @@ function renderReservations(reservations) {
         `;
     });
 }
+
+document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.checkInBtn');
+
+    if (!btn) return;
+    try {
+        await updateDoc(doc(db, 'reservations', btn.dataset.id), {
+                status: 'checked-in',
+                updatedAt: serverTimestamp()
+            }
+        );
+
+        loadReservations();
+
+    } catch (error) {
+        console.error(error);
+        alert('Error al realizar check-in');
+    }
+});
+
+document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.checkOutBtn');
+
+    if (!btn) return;
+    try {
+        await updateDoc(doc(db, 'reservations', btn.dataset.id), {
+                status: 'checked-out',
+                updatedAt: serverTimestamp()
+            }
+        );
+
+        loadReservations();
+
+    } catch (error) {
+        console.error(error);
+        alert('Error al realizar check-out');
+    }
+});
 
 function loadFilters() {
     const guests = [...new Set(allReservations.map(r => r.guestName))];

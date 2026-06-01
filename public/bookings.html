@@ -129,11 +129,20 @@
                                     <option value="">Todas las habitaciones</option>
                                 </select>
 
-                                <select id="filterStatus" class="form-select" style="width: 160px;">
+                                <select id="filterStatus" class="form-select">
                                     <option value="">Todos los estados</option>
-                                    <option value="reserved">Reservada</option>
-                                    <option value="cancelled">Cancelada</option>
-                                    <option value="completed">Finalizada</option>
+                                    <option value="reserved">
+                                        Reservada
+                                    </option>
+                                    <option value="cancelled">
+                                        Canceladas
+                                    </option>
+                                    <option value="checked-in">
+                                        Hospedado
+                                    </option>
+                                    <option value="checked-out">
+                                        Finalizada
+                                    </option>
                                 </select>
 
                                 <select id="sortReservations" class="form-select" style="width: 150px;">
@@ -160,6 +169,7 @@
                                         <th>Huéspedes</th>
                                         <th>Total</th>
                                         <th>Estado</th>
+                                        <th>Estadía</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
